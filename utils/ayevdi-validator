@@ -32,7 +32,8 @@ validator_list=$(tempfile) &&\
 cat ${1} | awk -F"'" -vfn=${1} 'BEGIN {ln=0};
 /.*/ {ln=ln+1};
 /^\# AYESEC:POST_SHS\(/ {print "if [ " $3 " == $(cat " fn " | head -" (ln + $2) " | tail -" $2 " | sha512sum - | cut -d\\  -f1) ]; then printf AYESEC:VALID:; else printf AYESEC:INVALID:; fi; echo POST_SHS:" fn ":@" ln ":+" $2};
-/^\# AYESEC:PREV_SHS\(/ {print "if [ " $3 " == $(cat " fn " | head -" (ln - 1) " | tail -" $2 " | sha512sum - | cut -d\\  -f1) ]; then printf AYESEC:VALID:; else printf AYESEC:INVALID:; fi; echo PREV_SHS:" fn ":@" ln ":-" $2}' | sed 's/\ lines//g; s/\ )=/ /g' > ${validator_list} &&\
+/^\# AYESEC:PREV_SHS\(/ {print "if [ " $3 " == $(cat " fn " | head -" (ln - 1) " | tail -" $2 " | sha512sum - | cut -d\\  -f1) ]; then printf AYESEC:VALID:; else printf AYESEC:INVALID:; fi; echo PREV_SHS:" fn ":@" ln ":-" $2}' | sed 's/\ lines//g; s/\ )=/ /g' >${validator_list} &&\
+if [ $(cat ${1} | grep '# AYESEC:STATUTORY_HEADER' | wc -l) -lt 2 ]; then echo echo AYESEC:INVALID:No statutory header in ${n}; else echo echo AYESEC:VALID:Statutory header found in ${n}; fi >>${validator_list} &&\
 source ${validator_list} | tee >(if [ 0 -lt $(grep AYESEC:INVALID: | wc -l) ]; then echo AYESEC:ERROR:${1}; else echo AYESEC:OK:${1}; fi)
 sleep 0.01
 echo AYESEC:RUN:@$(date +%s):$RANDOM
