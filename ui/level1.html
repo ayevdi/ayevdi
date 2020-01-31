@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+/*
+# AYESEC:POST_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+# AYESEC:STATUTORY_HEADER
+if [ "${ayevdi_sourcefrom}" != "${HOME}/.ayevdi/ayevdi-sourcefrom" ]
+then
+  echo "AyeVDI by https://ayeai.xyz"
+  echo "Copyright (C) 2019-2020 Abhishek Choudhary, Dr Srija Katta"
+  echo ""
+  echo "NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only)"
+  echo "Further usage of these software, artifacts or methods"
+  echo "are subject to the 'latest' license agreement avaialble at"
+  echo "https://raw.githubusercontent.com/ayeai/spl/master/LICENSE"
+  echo ""
+  echo "AyeVDI not activated. Please use the following command to"
+  echo "activate AyeVDI"
+  echo '  ayesh=$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O${ayesh} -q && . ${ayesh}'
+  echo ""
+  exit
+fi
+# AYESEC:STATUTORY_HEADER_COMPLETED
+# AYESEC:PREV_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+*/
+
+body {
+  font-family: Arial;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: black;
+}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 8px 16px;
+  transition: 0.3s;
+  font-size: 15px;
+  font-weight: 600;
+  background-color: #ffcc80;
+  margin: 1px 1px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ffc266;
+  color: gray;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ffb84d;
+  color: white;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: inline;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-top: none;
+  position: absolute;
+}
+
+/* Style the close button */
+.topright {
+  display: inline-block;
+  float: right;
+  cursor: pointer;
+  font-size: 32px;
+  position: absolute;
+  top: -35px;
+  right: 10px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  color: white;
+}
+
+.topright .tooltiptext {
+  visibility: hidden;
+  width: 150px;
+  background-color: white;
+  opacity: 0.9;
+  color: red;
+  text-align: center;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-radius: 5px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  top: 25px;
+  right: 105%;
+  z-index: 200;
+
+  font-size: 14px;
+  font-weight: 100;
+}
+
+.topright:hover .tooltiptext {
+  visibility: visible;
+}
+
+.topright:hover {color: red;}
+
+/**/
+.topright2 {
+  display: inline-block;
+  float: right;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 600;
+  position: absolute;
+  top: -30px;
+  right: 30px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  color: white;
+}
+
+.topright2 .tooltiptext {
+  visibility: hidden;
+  width: 150px;
+  background-color: white;
+  opacity: 0.9;
+  color: blue;
+  text-align: center;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-radius: 5px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  top: 20px;
+  right: 105%;
+  z-index: 200;
+
+  font-size: 14px;
+  font-weight: 100;
+}
+
+.topright2:hover .tooltiptext {
+  visibility: visible;
+}
+
+.topright2:hover {color: blue;}
+</style>
+</head>
+<body>
+
+<div class="tab">
+  <button class="addCntr"  id="addCntrButton" onclick="addCntr(event)">Add container...</button>
+</div>
+
+<div id="addCntrDiv" class="addCntr" style="display: inline; visibility: hidden;">
+  <p>Add a new container...</P>
+</div>
+
+<script>
+function openTab(evt, tabName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "inline";
+  }
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.visibility = "hidden";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(tabName).style.visibility = "visible";
+  evt.currentTarget.className += " active";
+}
+
+CntrNum=0
+CntrMax=5 // Restrict max 3 containers per web session - 3 is good enough for HPC courses
+// TODO: Fix slow interaction speed with 5 or more parallel connections
+function addCntr(evt) {
+
+  CntrNum=CntrNum+1;
+
+  if(CntrNum<=CntrMax) {
+    
+    var ibut = document.createElement('button');
+    ibut.setAttribute('class', 'tablinks');
+    ibut.setAttribute('id', 'button' + CntrNum); //Add the Cntr number from a global
+    ibut.setAttribute('onclick', "openTab(event, 'Cntr" + CntrNum + "')");
+
+    var s = "0" + CntrNum;
+    ibut.innerHTML='AyeCon™ ' + s.substr(s.length-2);
+
+    var ifrm = document.createElement('div');
+    ifrm.setAttribute('id', 'Cntr' + CntrNum); //Add the Cntr number from a global
+    ifrm.setAttribute('class', 'tabcontent');
+    ifrm.style.display = "inline";
+    ifrm.style.visibility = "hidden";
+    ifrm.innerHTML='<div class="topright"><span onclick="delCntr(event,'+CntrNum+');">&times</span><span class="tooltiptext">Close '+ibut.innerHTML+'</span></div>';
+    ifrm.innerHTML+='<div class="topright2"><span onclick="maxCntr(event,'+CntrNum+');">@</span><span class="tooltiptext">Float '+ibut.innerHTML+'</span></div>';
+    ifrm.innerHTML+='<iframe width="812" height="722" frameborder="0" src="lastlevel.html"></iframe>';
+
+    var el1 = document.getElementById('addCntrDiv');
+    el1.parentNode.insertBefore(ifrm, el1);
+
+    var el2 = document.getElementById('addCntrButton');
+    el2.parentNode.insertBefore(ibut, el2);
+
+    document.getElementById('button' + CntrNum).click();
+
+  }
+  if(CntrNum>=CntrMax) {
+
+    var el1 = document.getElementById('addCntrButton');
+    el1.style.display="none";
+
+  }
+}
+
+function maxCntr(event,dCntrNum) {
+  var el = document.getElementById('Cntr'+dCntrNum);
+  document.body.innerHTML=el.innerHTML;
+}
+
+function delCntr(event,dCntrNum) {
+  CntrMax+=1;
+
+  var el1 = document.getElementById('button'+dCntrNum);
+  el1.remove();
+
+  var el2 = document.getElementById('Cntr'+dCntrNum);
+  el2.remove();
+
+  var el3 = document.getElementById('addCntrButton');
+  el3.style.display="inline";
+
+  // Now see if any container is alive - activate that, or
+  // start a new container?
+  for(i=CntrMax-1;i>=dCntrNum+1;i--) {
+    var el4 = document.getElementById('button'+i);
+    try {
+      el4.click();
+    }
+    catch(err) {
+      // Log the order
+    }
+  }
+  for(i=1;i<=dCntrNum-1;i++) {
+    var el5 = document.getElementById('button'+i);
+    try {
+      el5.click();
+    }
+    catch(err) {
+      // Log the order
+    }
+  }
+}
+
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("addCntrButton").click();
+
+// TODO: Create menu dropdown effect
+   
+</script>
+</body>
+</html> 

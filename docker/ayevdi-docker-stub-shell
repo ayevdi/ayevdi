@@ -1,0 +1,70 @@
+# AYESEC:POST_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+# AYESEC:STATUTORY_HEADER
+if [ "${ayevdi_sourcefrom}" != "${HOME}/.ayevdi/ayevdi-sourcefrom" ]
+then
+  echo "AyeVDI by https://ayeai.xyz"
+  echo "Copyright (C) 2019-2020 Abhishek Choudhary, Dr Srija Katta"
+  echo ""
+  echo "NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only)"
+  echo "Further usage of these software, artifacts or methods"
+  echo "are subject to the 'latest' license agreement avaialble at"
+  echo "https://raw.githubusercontent.com/ayeai/spl/master/LICENSE"
+  echo ""
+  echo "AyeVDI not activated. Please use the following command to"
+  echo "activate AyeVDI"
+  echo '  ayesh=$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O${ayesh} -q && . ${ayesh}'
+  echo ""
+  exit
+fi
+# AYESEC:STATUTORY_HEADER_COMPLETED
+# AYESEC:PREV_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+
+# TODO: Replace extip with fully qualified name
+export extip=$(dig @resolver1.opendns.com ANY myip.opendns.com +short)
+export ayeuid=$(expr $(id -u ${USER}) + 12345)
+export ayesid=$(expr $(id -u ${USER}) + 15432)
+export ayecntr=ayevdi_${ayeuid}
+
+# Start only if not found
+wget --no-cache -O/dev/null -q http://${extip}:${ayesid}:4200
+if [ $? -gt 0 ]
+then
+
+  # Create a temporal folder to hold session logs
+  # Note: While we will not be launching VNC or GUI, this allows control
+  # over a user starting VNC from inside a shell session
+  # TODO: Identify policies and use cases
+  export tmplogfldr=${HOME}/.ayevdi/.vnc_${ayeuid}_$(date +%s)
+  mkdir -p ${tmplogfldr}
+
+  # Create docker container for ${USER} 
+  export ayevdi_img_common=$(sourcefrom https://bit.ly/ayevdi-image-common)
+  docker pull ayeai/ayevdi:${ayevdi_img_common}
+
+  docker container stop ${ayecntr}
+  docker container rm ${ayecntr}
+  export ayetime_label="ayetime="$(date +%s)
+  docker run -l ${ayetime_label} -p ${ayeuid}:6080 -h ${USER}.$(hostname).ayevdi.xyz -v ${tmplogfldr}:/root/.vnc -p ${ayesid}:4200 --name ${ayecntr} -dt ayeai/ayevdi:${ayevdi_img_common}
+
+  docker exec ${ayecntr} ls /home/ayeuser &&\
+  logger "SUCCESS:AYECNTR:${ayecntr} for ${USER}" 
+  # Done creating docker container for ${USER}
+
+  # Now lets get shell server started
+  sourcefrom https://bit.ly/ayevdi-daemon-start "ayevdi-shell-${USER}" "docker exec -it ${ayecntr} bash -lci 'sourcefrom https://bit.ly/ayevdi-ayeuser-shell 4200'"
+
+  # Wait for shell server to be ready
+  wget --no-cache -O/dev/null -q http://${extip}:${ayesid}
+  while [ $? -gt 0 ]
+  do
+    echo Waiting for shell server...
+    sleep 1
+    wget --no-cache -O/dev/null -q http://${extip}:${ayesid}
+  done
+fi
+
+#The last two lines must carry the urls for shell and gui terminals respectively
+echo AyeVDI by AyeAI
+echo http://${extip}:${ayesid}/ is the Shell console
+echo http://${extip}:${ayesid}/ only Shell console is live
+

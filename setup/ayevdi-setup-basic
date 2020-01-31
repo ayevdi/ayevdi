@@ -1,0 +1,62 @@
+#!/bin/bash
+# AYESEC:POST_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+# AYESEC:STATUTORY_HEADER
+if [ "${ayevdi_sourcefrom}" != "${HOME}/.ayevdi/ayevdi-sourcefrom" ]
+then
+  echo "AyeVDI by https://ayeai.xyz"
+  echo "Copyright (C) 2019-2020 Abhishek Choudhary, Dr Srija Katta"
+  echo ""
+  echo "NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only)"
+  echo "Further usage of these software, artifacts or methods"
+  echo "are subject to the 'latest' license agreement avaialble at"
+  echo "https://raw.githubusercontent.com/ayeai/spl/master/LICENSE"
+  echo ""
+  echo "AyeVDI not activated. Please use the following command to"
+  echo "activate AyeVDI"
+  echo '  ayesh=$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O${ayesh} -q && . ${ayesh}'
+  echo ""
+  exit
+fi
+# AYESEC:STATUTORY_HEADER_COMPLETED
+# AYESEC:PREV_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+
+# Well this needs to be run only once
+if [ ! -e ${HOME}/.ayevdi/ayevdi-setup-basic.done ]
+then
+  sudo apt update -y
+  sudo apt upgrade -y
+  sudo apt autoremove -y
+  # To install the edubuntu desktop uncomment the next line
+  #sudo apt install edubuntu-desktop -y -q
+  sudo apt install ubuntu-mate-desktop -y -q
+  sudo apt install shellinabox novnc apache2 -y -q
+  sudo apt install tigervnc-common tigervnc-xorg-extension tigervnc-standalone-server -y -q
+  sudo apt install curl git wget expect -y -q
+  mkdir -p ${HOME}/.vnc
+  wget -O- -q https://bit.ly/xstartup-sample >${HOME}/.vnc/xstartup
+
+  sudo adduser --disabled-password --gecos "" ayeuser && (echo ayeuser:ayeaye | sudo chpasswd)
+  date +%s >${HOME}/.ayevdi/ayevdi-setup-basic.done
+fi
+
+# TODO: Offer ramdomization on these
+prog=/usr/bin/vncpasswd
+export mypass="q1w2e3"
+export vpass="123456"
+
+/usr/bin/expect <<EOF
+spawn "$prog"
+expect "Password:"
+send "$mypass\r"
+expect "Verify:"
+send "$mypass\r"
+expect "Would you like to enter a view-only password (y/n)?"
+send "y\r"
+expect "Password:"
+send "$vpass\r"
+expect "Verify:"
+send "$vpass\r"
+expect eof
+exit
+EOF
+

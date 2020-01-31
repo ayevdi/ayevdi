@@ -1,0 +1,190 @@
+#!/bin/bash
+# AYESEC:POST_SHS('187 lines')=76ade6a71a2b3c0834141df667e1b34459c98239e338318bc3001c8a71b3471ef0a2dd0e9f49c424985da56afbdb921e283383bb4d142d9b466da7cde00dfd35
+# AYESEC:FILE_TOP('ayevdi/ost/ayevdi-sfrom-init')
+
+# AYESEC:POST_SHS('26 lines')=c108bc8dce63695b1554023282d716f23813136ddbba66c941c6e9f3bc86e775cfeddd1fea5ab66d9f8316f37ae727f7810fa872452b63983878f16c0b5714d2
+# AYESEC:MASTPOST_NOTICE
+# AYESEC:POST_SHS('22 lines')=e9160e0b3075069c3a634cf1cccf76273426e72c86687d176f6bc33f33c3db2c53e6c793abc71a5a639adde8c14f2ebfc0f39da0874785106a43907d96448344
+# AyeVDI
+# Virtualized Deployment IaaS (VDI) by AyeAI
+# 
+# NOTICE
+# Copyright (C) 2019-2020 Abhishek Choudhary, Dr Srija Katta
+# 
+# To all WHO IT MAY CONCERN,
+# Greetings,
+# All artifacts and methods in this project are offered with 
+# NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only),
+# subject to the jurisdictions of courts in Hyderabad, India,
+# and solely in accordance with AyeAI SPL version 1, or later,
+# as expressed at the follow URL and at the most current update
+# https://raw.githubusercontent.com/ayeai/spl/master/LICENSE
+# incuding its clauses of automatic implicit update of license,
+# and unless in conflict the terms and conditions of GNU GPL v2
+# shall apply with no retort to other GPL licenses, AND, These
+# terms and conditions are implied read, understood and accepted
+# by the access, or usage of these artifacts and methods which
+# must STRICTLY be IN ACCORDANCE, and this notice must be 
+# reproduced in derivatives along with the original assertions
+# of copyrights and other rights reserved.
+# AYESEC:PREV_SHS('22 lines')=e9160e0b3075069c3a634cf1cccf76273426e72c86687d176f6bc33f33c3db2c53e6c793abc71a5a639adde8c14f2ebfc0f39da0874785106a43907d96448344
+# AYESEC:MASTPOST_NOTICE_COMPLETED
+# AYESEC:PREV_SHS('26 lines')=c108bc8dce63695b1554023282d716f23813136ddbba66c941c6e9f3bc86e775cfeddd1fea5ab66d9f8316f37ae727f7810fa872452b63983878f16c0b5714d2
+
+# AYESEC:POST_SHS('39 lines')=dfe7bded8bc5c9f15b58dae691ec611775d67b0d39e3daf370808ba6a680834c5595a03ed7d2debe1657d9a1f451831daf992d76b0da5d1fdee11eb19baa73a8
+# AYESEC:ONE_FILE_EXCEPTION("ayevdi-sfrom-init")
+# This is an exception header for ayevdi-sfrom-init as AyeVDI
+# is not expected to have been initialized till this file is
+# called. Hereafter, use the follwing sample in each script
+# header. For other types of artifacts, please see URL below
+# https://bit.ly/ayevdi-headers
+# Sample bash statutory header:
+#   To use see output of the command below (without #)
+#   wget https://bit.ly/ayevdi-sfrom-init -O- -q | cut -c 2- | head -55 | tail -18
+## AYESEC:POST_SHS('18 lines')=9e65a33c9f13130a71e5588e1211b9d2
+## AYESEC:STATUTORY_HEADER
+#if [ "${ayevdi_sourcefrom}" != "${HOME}/.ayevdi/ayevdi-sourcefrom" ]
+#then
+#  echo "AyeVDI by https://ayeai.xyz"
+#  echo "Copyright (C) 2019-2020 Abhishek Choudhary, Dr Srija Katta"
+#  echo ""
+#  echo "NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only)"
+#  echo "Further usage of these software, artifacts or methods"
+#  echo "are subject to the 'latest' license agreement avaialble at"
+#  echo "https://raw.githubusercontent.com/ayeai/spl/master/LICENSE"
+#  echo ""
+#  echo "AyeVDI not activated. Please use the following command to"
+#  echo "activate AyeVDI"
+#  echo '  ayesh=$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O${ayesh} -q && . ${ayesh}'
+#  echo ""
+#  exit
+#fi
+## AYESEC:STATUTORY_HEADER_COMPLETED
+## AYESEC:PREV_SHS('18 lines')=9e65a33c9f13130a71e5588e1211b9d2
+
+if [ ! -f ${HOME}/.ayevdi/ayevdi-sourcefrom ]
+then
+  mkdir -p ${HOME}/.ayevdi/
+  wget https://bit.ly/ayevdi-sfrom -O- -q > ${HOME}/.ayevdi/ayevdi-sourcefrom
+fi
+
+export ayevdi_sourcefrom=${HOME}/.ayevdi/ayevdi-sourcefrom
+
+# AYESEC:ONE_FILE_EXCEPTION_COMPLETED
+# AYESEC:PREV_SHS('39 lines')=dfe7bded8bc5c9f15b58dae691ec611775d67b0d39e3daf370808ba6a680834c5595a03ed7d2debe1657d9a1f451831daf992d76b0da5d1fdee11eb19baa73a8
+
+# AYESEC:POST_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+# AYESEC:STATUTORY_HEADER
+if [ "${ayevdi_sourcefrom}" != "${HOME}/.ayevdi/ayevdi-sourcefrom" ]
+then
+  echo "AyeVDI by https://ayeai.xyz"
+  echo "Copyright (C) 2019-2020 Abhishek Choudhary, Dr Srija Katta"
+  echo ""
+  echo "NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only)"
+  echo "Further usage of these software, artifacts or methods"
+  echo "are subject to the 'latest' license agreement avaialble at"
+  echo "https://raw.githubusercontent.com/ayeai/spl/master/LICENSE"
+  echo ""
+  echo "AyeVDI not activated. Please use the following command to"
+  echo "activate AyeVDI"
+  echo '  ayesh=$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O${ayesh} -q && . ${ayesh}'
+  echo ""
+  exit
+fi
+# AYESEC:STATUTORY_HEADER_COMPLETED
+# AYESEC:PREV_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+
+# AYEINTERNS:TASK:Automate generation of file level and section MD5 sum
+# Suggestions: Use tags to autofill the lines covered and the md5 sum
+# AYEINTERNS:TASK_END
+
+# AYEINTERNS:TASK:Automate validation of file level and section MD5 sum
+# Suggestions: Ensure correctness and validity of the vaidator itself!
+# AYEINTERNS:TASK_END
+
+# AYESEC:POST_SHS('28 lines')=8f9979b77319ac60aec37a1fbc37207fa9e5d887b37abc503c26a1755ce2c6a124b2a9d68f61f1509798056a7c5945fef23a57f968c5cd933f0d6ae6066822e8
+# AYESEC_NOTICE:'The following 27 lines must not be modified or removed'
+# AYESEC:POST_SHS('25 lines')=dd5d630c42c47c2a22c4d59ab20fde3a390f92d17dd571dc535994ab002d1ca6d2690005615ae0a03951204b4adfd713b8ddcfd44c61360161cb65254dd0dd44
+# AYESEC:SIGNATURE_PLAINTEXT_SOURCEFROM
+# Line 2
+echo "Welcome to AyeVDI by https://ayeai.xyz"
+echo "Copyright (C) 2019-2020 Abhishek Choudhary, Dr Srija Katta"
+echo ""
+# Line 6
+echo "AyeVDI sourcefrom activated!"
+echo ""
+echo "NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only)"
+echo "Further usage of these software, artifacts or methods"
+echo "are subject to the 'latest' license agreement available at"
+echo "https://raw.githubusercontent.com/ayeai/spl/master/LICENSE"
+echo ""
+# Line 14
+echo "If you do not accept the above terms and conditions, you"
+echo "may not use this software, and are at liberty to use the"
+echo "following commands in a bash terminal to remove traces,"
+echo "under the supervision of someone familiar with 'bash shell'"
+echo "         rm -rf "'${HOME}'"/.ayevdi"
+echo "         export ayevdi_sourcefrom=THANK YOU"
+echo ""
+echo "Towards greater glories with peace on Earth and beyond..."
+echo ""
+# Line 24
+# AYESEC:SIGNATURE_PLAINTEXT_SOURCEFROM_COMPLETED
+# AYESEC:PREV_SHS('25 lines')=dd5d630c42c47c2a22c4d59ab20fde3a390f92d17dd571dc535994ab002d1ca6d2690005615ae0a03951204b4adfd713b8ddcfd44c61360161cb65254dd0dd44
+# AYESEC:PREV_SHS('28 lines')=8f9979b77319ac60aec37a1fbc37207fa9e5d887b37abc503c26a1755ce2c6a124b2a9d68f61f1509798056a7c5945fef23a57f968c5cd933f0d6ae6066822e8
+
+# NOTICE: The use of aliases is convenient but exposes a potential
+# man-in-the-middle threat
+
+
+# TODO: Add automated aliasing of shortened links
+alias ayevdi-sourcefrom='. ${ayevdi_sourcefrom}'
+alias sourcefrom='ayevdi-sourcefrom'
+
+alias ayevdi-bsf='ayevdi-sourcefrom bsf'
+
+alias ayevdi-validator='ayevdi-bsf https://bit.ly/ayevdi-validator'
+alias validator='ayevdi-validator'
+
+alias ayevdi-logger='ayevdi-bsf https://bit.ly/ayevdi-log'
+alias logger='ayevdi-logger'
+
+logger "AyeVDI sourcefrom activated... using ${ayesh}"
+
+validator ${ayesh} >${HOME}/.ayevdi/ayevdi-validator.$(basename ${ayesh})
+
+cat ${HOME}/.ayevdi/ayevdi-validator.$(basename ${ayesh}) | (if [ 0 -lt $(grep AYESEC:ERROR | wc -l) ];
+  then
+    logger "AYESEC:ERROR:Abort! Abort! Abort!"
+    echo "WARNING: AyeVDI has detected an error, that may be a potential threat!"
+    echo "Abort! Abort! Abort! Exiting shell in 10 secs... Press ctrl-c to stop abort..."
+    sleep 10
+    logger "Aborting on AYESEC:ERROR"
+    echo "Aborting on AYESEC:ERROR"
+    cp ${HOME}/.ayevdi/ayevdi-validator.$(basename ${ayesh}) ${HOME}/.ayevdi/ayevdi-error.fatal
+  else
+    # Display the mascot (Driksh for AyeAI green zone release)
+    # To reduce redundancy display the mascot only for the initial shell
+    # We compare againt ${SHLVL} <=2 to prevent repeat display in children
+    if [ $SHLVL -le 2 ]
+    then
+      # Even for ${SHLVL} <=2 display mascot no sooner than 60s
+      touch ${HOME}/.ayevdi/ayevdi-mascot-lastrun
+      if [ $(expr $(date +%s) - 0$(cat ${HOME}/.ayevdi/ayevdi-mascot-lastrun)) -ge 60 ]
+      then 
+        sourcefrom https://bit.ly/ayevdi-mascot-anim
+        date +%s >${HOME}/.ayevdi/ayevdi-mascot-lastrun
+      fi
+    fi
+    logger "Driksh has roared!"
+    echo ""
+  fi) && echo ""
+  
+if [ -e ${HOME}/.ayevdi/ayevdi-error.fatal ]
+then
+  #TBD: Decide whether to close shell here
+  echo "WARNING: The shell may exit at this point in future versions"
+fi
+
+# AYESEC:FILE_END('ayevdi/ost/ayevdi-sfrom-init')
+# AYESEC:PREV_SHS('187 lines')=76ade6a71a2b3c0834141df667e1b34459c98239e338318bc3001c8a71b3471ef0a2dd0e9f49c424985da56afbdb921e283383bb4d142d9b466da7cde00dfd35

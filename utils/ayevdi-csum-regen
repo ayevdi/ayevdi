@@ -1,0 +1,46 @@
+# AYESEC:POST_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+# AYESEC:STATUTORY_HEADER
+if [ "${ayevdi_sourcefrom}" != "${HOME}/.ayevdi/ayevdi-sourcefrom" ]
+then
+  echo "AyeVDI by https://ayeai.xyz"
+  echo "Copyright (C) 2019-2020 Abhishek Choudhary, Dr Srija Katta"
+  echo ""
+  echo "NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only)"
+  echo "Further usage of these software, artifacts or methods"
+  echo "are subject to the 'latest' license agreement avaialble at"
+  echo "https://raw.githubusercontent.com/ayeai/spl/master/LICENSE"
+  echo ""
+  echo "AyeVDI not activated. Please use the following command to"
+  echo "activate AyeVDI"
+  echo '  ayesh=$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O${ayesh} -q && . ${ayesh}'
+  echo ""
+  exit
+fi
+# AYESEC:STATUTORY_HEADER_COMPLETED
+# AYESEC:PREV_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+
+# Note: Call with "bsf" option to sourcefrom in case of SHS framework modifications
+# Note: The sourcefrom alias can be modified ignore validation if needed
+# Note: Default SHS is set to SHA512, but any other SHS will work
+# Note: Changes may require manual fixes
+
+if [ "$1" == "bsf" ]
+then
+  shift 2
+else
+  shift 1
+fi
+
+export certify_list=$(tempfile)
+echo "Generating certification sequence for ${1} at ${certify_list}"
+cat ${1} | awk -F"'" -vfn=${1} 'BEGIN {ln=1};
+/^\# AYESEC:POST_SHS\(/  {print "echo \"" $1 FS $2 FS ")=\"$(cat " fn " | head -" (ln + $2) " | tail -" $2 " | sha512sum - | cut -d\\  -f1)"; 
+                          ln=ln+1; next};
+/^\# AYESEC:PREV_SHS\(/  {print "echo \"" $1 FS $2 FS ")=\"$(cat " fn " | head -" (ln - 1) " | tail -" $2 " | sha512sum - | cut -d\\  -f1)"; 
+                          ln=ln+1; next};
+/.*/                     {print "cat " fn " | head -" ln " | tail -1"; ln=ln+1};' | sed 's/lines\ //g' >${certify_list}
+export tmpscript=$(tempfile)
+echo "Certifying ${1} with ${certify_list} at ${tmpscript}"
+. ${certify_list} >${tmpscript}
+echo "Replacing ${1} with ${tmpscript}"
+cat ${tmpscript} >${1}

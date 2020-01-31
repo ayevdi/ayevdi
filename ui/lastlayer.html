@@ -1,0 +1,751 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+/*
+# AYESEC:POST_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+# AYESEC:STATUTORY_HEADER
+if [ "${ayevdi_sourcefrom}" != "${HOME}/.ayevdi/ayevdi-sourcefrom" ]
+then
+  echo "AyeVDI by https://ayeai.xyz"
+  echo "Copyright (C) 2019-2020 Abhishek Choudhary, Dr Srija Katta"
+  echo ""
+  echo "NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only)"
+  echo "Further usage of these software, artifacts or methods"
+  echo "are subject to the 'latest' license agreement avaialble at"
+  echo "https://raw.githubusercontent.com/ayeai/spl/master/LICENSE"
+  echo ""
+  echo "AyeVDI not activated. Please use the following command to"
+  echo "activate AyeVDI"
+  echo '  ayesh=$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O${ayesh} -q && . ${ayesh}'
+  echo ""
+  exit
+fi
+# AYESEC:STATUTORY_HEADER_COMPLETED
+# AYESEC:PREV_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+*/
+
+/* Set style for the page */
+body {
+  font-family: Arial;
+  border: 0;
+  border-top: none;
+  border-left: none;
+  margin: 0;
+  padding: 0;
+  max-width: 800; /* To ensure positioning is correct on larger screens */
+}
+
+
+/* Remove the focus dotted outline in firefox */
+button::-moz-focus-inner {
+  border: 0;
+}
+
+/* Set style for the tab area - this holds the buttons */
+.tab {
+  font-family: Arial;
+  border: 0;
+  margin: 0;
+  padding: 0;
+
+  display: block; /* Ensure vertical blocking for window area */
+  position: absolute; /* Ensure buttons tab is flush with top */
+  top: 0;
+  transition: 0.2s 1.5s; /* Onset delay 200ms, offset delay 1500ms */
+}
+
+
+/* Set style for tab buttons */
+.tab button {
+  font-family: Arial;
+  border: 0;
+  margin: 0;
+  padding: 0;
+
+  display: inline; /* This allows buttons to appear side by side */
+  cursor: pointer; /* Change the cursor shape while focus is on the button */
+
+  padding: 6px 12px; /* Make buttons bigger by adding padding */
+
+  border-top-left-radius: 10px;  /* Make the top left of buttons rounded */
+  border-top-right-radius: 10px; /* Make the top right of buttons rounded */
+
+  outline: 0; /* This prevents the display of a bo around the buttons on click */
+
+  float: left; /* Stack the buttons together */ 
+
+  margin: 1px 1px;  /* Give the buttons a distinguishing margin */
+  margin-bottom: 0; /* Ensure buttons are flush with content below */
+
+  transition: 0.3s;
+  text-align: center;
+
+  /* The following style elements have been superseded in config files */
+  /* Do NOT modify here */
+  font-size: 15px;  /* Set the font size for buttons */
+  font-weight: 600; /* Make the button text bold */
+  background-color: #b3e6b3; /* Set the button default color */
+}
+
+/* Hover effect on buttons */
+.tab button:hover {
+  /* The following style elements have been superseded in config files */
+  /* Do NOT modify here */
+  background-color: #8cd98c;
+  color: gray;
+}
+
+/* Set style for active buttons */
+.tab button.active {
+  /* The following style elements have been superseded in config files */
+  /* Do NOT modify here */
+  background-color: #53c653;
+  color: white;
+}
+
+/* Set style for the window area - contents of the tab */
+.tabcontent {
+  font-family: Arial;
+  border: 0;
+  margin: 0;
+  padding: 0;
+
+  display: block; /* Ensure vertical blocking for window area */
+  position: absolute; /* Allow overlapping windows */
+  top: 30px;
+}
+
+/* Style the close button */
+.topright1 {
+  font-family: Arial;
+  border: 2px solid white;
+  border-radius: 5px;
+  margin: 0;
+  padding: 0;
+
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  background-color: black;
+
+  float: right;
+  cursor: pointer;
+
+  position: absolute;
+  top: -25;
+  left: 777;
+}
+
+.topright1:hover {
+  color: red;
+  background-color: #777;
+  border: 2px solid #777;
+}
+
+.topright1 .tooltiptext {
+  font-family: Arial;
+  border: 0;
+  margin: 0;
+
+  font-size: 14px;
+  font-weight: 600;
+  color: red;
+  background-color: white;
+
+  border-radius: 10px;
+  padding: 5px 5px;
+  min-width: 150px;
+  text-align: center;
+
+  position: absolute;
+  top: 25px;
+  right: 25px;
+
+  z-index: 200;
+
+  visibility: hidden;
+
+  opacity: 0.8;
+}
+
+.topright1:hover .tooltiptext {
+  visibility: visible;
+}
+
+/* Style the float button */
+.topright2 {
+  font-family: Arial;
+  border: 2px solid white;
+  border-radius: 5px;
+  margin: 0;
+  padding: 0;
+
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  background-color: black;
+
+  float: right;
+  cursor: pointer;
+
+  position: absolute;
+  top: -25;
+  left: 753;
+}
+
+.topright2:hover {
+  color: #e65c00;
+  background-color: #fff;
+}
+
+.topright2 .tooltiptext {
+  font-family: Arial;
+  border: 0;
+  margin: 0;
+
+  font-size: 14px;
+  font-weight: 600;
+  color: #e65c00;
+  background-color: white;
+
+  border-radius: 10px;
+  padding: 5px 5px;
+  min-width: 150px;
+  text-align: center;
+
+  position: absolute;
+  top: 25px;
+  right: 25px;
+
+  z-index: 200;
+
+  visibility: hidden;
+
+  opacity: 0.8;
+}
+
+.topright2:hover .tooltiptext {
+  visibility: visible;
+}
+
+/* Style the project button */
+.topright3 {
+  font-family: Arial;
+  border: 2px solid white;
+  border-radius: 5px;
+  margin: 0;
+  padding: 0;
+
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  background-color: black;
+
+  float: right;
+  cursor: pointer;
+
+  position: absolute;
+  top: -25;
+  left: 730;
+}
+
+.topright3:hover {
+  color: green;
+  background-color: #fff;
+}
+
+.topright3 .tooltiptext {
+  font-family: Arial;
+  border: 0;
+  margin: 0;
+
+  font-size: 14px;
+  font-weight: 600;
+  color: green;
+  background-color: white;
+
+  border-radius: 10px;
+  padding: 5px 5px;
+  min-width: 150px;
+  text-align: center;
+
+  position: absolute;
+  top: 25px;
+  right: 25px;
+
+  z-index: 200;
+
+  visibility: hidden;
+
+  opacity: 0.8;
+}
+
+.topright3:hover .tooltiptext {
+  visibility: visible;
+}
+
+/* Style the project button */
+.topright4 {
+  font-family: Arial;
+  border: 2px solid white;
+  border-radius: 5px;
+  margin: 0;
+  padding: 0;
+
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  background-color: black;
+
+  float: right;
+  cursor: pointer;
+
+  position: absolute;
+  top: -25;
+  left: 707;
+}
+
+.topright4:hover {
+  color: blue;
+  background-color: #fff;
+}
+
+.topright4 .tooltiptext {
+  font-family: Arial;
+  border: 0;
+  margin: 0;
+
+  font-size: 14px;
+  font-weight: 600;
+  color: blue;
+  background-color: white;
+
+  border-radius: 10px;
+  padding: 5px 5px;
+  min-width: 150px;
+  text-align: center;
+
+  position: absolute;
+  top: 25px;
+  right: 25px;
+
+  z-index: 200;
+
+  visibility: hidden;
+
+  opacity: 0.8;
+}
+
+.topright4:hover .tooltiptext {
+  visibility: visible;
+}
+
+/* Style the sink button */
+.sinkright {
+  font-family: Arial;
+  border: 2px solid white;
+  border-radius: 5px;
+  margin: 0;
+  padding: 0;
+
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  background-color: black;
+
+  float: right;
+  cursor: pointer;
+
+  position: absolute;
+  top: 5;
+  left: 707;
+}
+
+.sinkright:hover {
+  color: blue;
+  background-color: #fff;
+}
+
+.sinkright .tooltiptext {
+  font-family: Arial;
+  border: 0;
+  margin: 0;
+
+  font-size: 14px;
+  font-weight: 600;
+  color: blue;
+  background-color: white;
+
+  border-radius: 10px;
+  padding: 5px 5px;
+  min-width: 150px;
+  text-align: center;
+
+  position: absolute;
+  top: 25px;
+  right: 25px;
+
+  z-index: 200;
+
+  visibility: hidden;
+
+  opacity: 0.8;
+}
+
+.sinkright:hover .tooltiptext {
+  visibility: visible;
+}
+
+</style>
+</head>
+
+<body>
+<div class="tab">
+  <button class="addNewBut" id="addNewButton"  style="display: none; visibility: hidden">Add new button...</button>
+</div>
+
+<div id="addNewDiv" class="addTab" style="display: inline; visibility: hidden;">
+  <p>Add a new div... If you can see this message then there's some bug in AyeUI! Please report it.</p>
+</div>
+
+<script>
+var tabTypeList=["WebApp","Term","GUI"];
+var tabTypeSizeX=[800,800,800];
+var tabTypeSizeY=[640,500,640];
+var tabTypeNum=[0,0,0];
+var tabTypeStartNum=[1,1,1];
+var tabTypeInit=[0,1,1];
+var tabTypeMax=[2,5,1];
+var tabTypeSrc=[
+                "http://35.244.14.58:13346/vnc.html",
+                "http://35.244.14.58:16433/",
+                "http://35.244.14.58:13346/vnc_auto.html"
+               ];
+var tabTypeStyleIndex={Button:{backgroundColor:0,color:1,fontSize:2,fontWeight:3,backgroundImage:4}}
+var tabTypeButtonStyle=[{ normal:["#c2c2a3","black","15px",600,""],
+                          active:["#8a8a5c","white","15px",600,""],
+                          hover:["#a3a375","gray","15px",600,""],
+                          add:["#c2c2a3","black","15px",600,"linear-gradient(to right, #fff 0%, #8a8a5c 100%)"],
+                          addHover:["#a3a375","black","15px",600,"linear-gradient(to right, #8a8a5c 0%, #fff 100%)"] },
+                        { normal:["#b3e6b3","black","15px",600,""],
+                          active:["#53c653","white","15px",600,""],
+                          hover:["#8cd98c","gray","15px",600,""],
+                          add:["#b3e6b3","black","15px",600,"linear-gradient(to right, #d9f2d9 0%, #53c653 100%)"],
+                          addHover:["#8cd98c","black","15px",600,"linear-gradient(to right, #53c653 0%, #d9f2d9 100%)"] },
+                        { normal:["#b3b3e6","black","15px",600,""],
+                          active:["#8c8cd9","white","15px",600,""],
+                          hover:["#d9d9f2","gray","15px",600,""],
+                          add:["#b3e6b3","black","15px",600,"linear-gradient(to right, #d9d9f2 0%, #8c8cd9 100%)"],
+                          addHover:["#8cd98c","black","15px",600,"linear-gradient(to right, #8c8cd9 0%, #d9d9f2 100%)"] }
+                       ];
+
+function assocIndex(refArr,dHash) {
+  var numIndex=0;
+
+  while(numIndex<refArr.length) {
+    if (refArr[numIndex]==dHash) {
+      return numIndex;
+    }
+    numIndex+=1;
+  }
+  return -1;
+}
+
+
+function parseSetButtonStyle(iBut,TabType,normalStyle,hoverStyle) {
+    //TODO: Optimize these sections to parse and generate the code stubs
+    //normal
+    iBut.style.backgroundColor=tabTypeButtonStyle[assocIndex(tabTypeList,TabType)][normalStyle][0];
+    iBut.style.color=tabTypeButtonStyle[assocIndex(tabTypeList,TabType)][normalStyle][1];
+    iBut.style.fontSize=tabTypeButtonStyle[assocIndex(tabTypeList,TabType)][normalStyle][2];
+    iBut.style.fontWeight=tabTypeButtonStyle[assocIndex(tabTypeList,TabType)][normalStyle][3];
+    iBut.style.backgroundImage=tabTypeButtonStyle[assocIndex(tabTypeList,TabType)][normalStyle][4];
+
+    //hover
+    //->enter
+    iBut.setAttribute('onmouseenter','this.style.backgroundColor="'+tabTypeButtonStyle[assocIndex(tabTypeList,TabType)][hoverStyle][0]+'";'
+    +'this.style.color="'+tabTypeButtonStyle[assocIndex(tabTypeList,TabType)][hoverStyle][1]+'";'
+    +'this.style.fontSize="'+tabTypeButtonStyle[assocIndex(tabTypeList,TabType)][hoverStyle][2]+'";'
+    +'this.style.fontWeight="'+tabTypeButtonStyle[assocIndex(tabTypeList,TabType)][hoverStyle][3]+'";'
+    +'this.style.backgroundImage="'+tabTypeButtonStyle[assocIndex(tabTypeList,TabType)][hoverStyle][4]+'"');
+    //->leave
+    iBut.setAttribute('onmouseleave','this.style.backgroundColor="'+tabTypeButtonStyle[assocIndex(tabTypeList,TabType)][normalStyle][0]+'";'
+    +'this.style.color="'+tabTypeButtonStyle[assocIndex(tabTypeList,TabType)][normalStyle][1]+'";'
+    +'this.style.fontSize="'+tabTypeButtonStyle[assocIndex(tabTypeList,TabType)][normalStyle][2]+'";'
+    +'this.style.fontWeight="'+tabTypeButtonStyle[assocIndex(tabTypeList,TabType)][normalStyle][3]+'";'
+    +'this.style.backgroundImage="'+tabTypeButtonStyle[assocIndex(tabTypeList,TabType)][normalStyle][4]+'"');
+}
+
+var ActiveTabType=null;
+var ActiveTabNum=null;
+
+function openTab(evt, TabType, TabNum) {
+  var index, typeIndex, tabcontent, tablinks;
+
+  var tabName=TabType + TabNum;
+
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (index = 0; index < tabcontent.length; index++) {
+    tabcontent[index].style.display = "block";
+    tabcontent[index].style.visibility = "hidden";
+  }
+  for(typeIndex=0;typeIndex<tabTypeList.length;typeIndex++) {
+    tablinks = document.getElementsByClassName('tablink-' + tabTypeList[typeIndex]);
+    for (index = 0; index < tablinks.length; index++) {
+      tablinks[index].className = tablinks[index].className.replace(" active", "");
+      parseSetButtonStyle(tablinks[index],tabTypeList[typeIndex],"normal","hover");
+    }
+  }
+  document.getElementById(tabName).style.visibility = "visible";
+  evt.currentTarget.className += " active";
+  parseSetButtonStyle(evt.currentTarget,TabType,"active","active");
+
+  ActiveTabType = TabType;
+  ActiveTabNum = TabNum;
+}
+
+window.setInterval(function(){ // Set interval for checking
+  // Note: Fix specific focus issues here
+  // TODO: This should be profile driven and not brute force
+
+  // #1. Fix the noVNC keyboard focus issue
+  // TODO: Add error handling
+  if ((ActiveTabType == "GUI") || (ActiveTabType == "Term") && (ActiveTabNum != null)) {
+    var tab = document.getElementById(ActiveTabType + ActiveTabNum);
+    if ( tab != null ) {
+      var innerFrame = tab.querySelector('#TabFrameInner');
+      if (innerFrame != null) {
+        innerFrame.focus();
+        innerFrame.click();
+      }
+    }
+  }
+}, 75); // Repeat every 75 milliseconds
+// Note: This may still miss the initial keystrokes, but tolerable
+// TODO: This is a patchy fix! Needs to be adddressed based on noVNC rfb refresh
+
+function requestFullScreen(element) {
+    // Supports most browsers and their versions.
+    var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
+
+    if (requestMethod != false) { // Native full screen.
+        requestMethod.call(element);
+    }
+}
+
+function projectTab(event,TabType,TabNum) {
+/* TODO: This is a 'special-case' projector
+ that projects onto the current PHY device (monitor).
+ We need a general-case projector that can project onto 
+ any HMI (in other words - casting)
+ 
+  var myWindow = window.open("", "projectWindow");
+  myWindow.document.body.innerHTML=ifrm.innerHTML;
+*/
+  var tab = document.getElementById(TabType + TabNum);
+  var innerFrame = tab.querySelector('#TabFrameInner');
+
+  requestFullScreen(innerFrame);
+}
+
+
+function minTab(event,TabType,TabNum) {
+/* The sink button can serve either download or refresh
+ functions at the basic page level */
+  var tab = document.getElementById(TabType + TabNum);
+  var innerFrame = tab.querySelector('#TabFrameInner');
+
+  // Lets refresh for now
+  // TODO: Add download image, audio, video etc
+  innerFrame.src=innerFrame.src;
+}
+
+function maxTab(event,TabType,TabNum) {
+  var el = document.getElementById(TabType + TabNum);
+
+  var  ifrm = document.createElement('div');
+  ifrm.setAttribute('id', 'orisource');
+  ifrm.setAttribute('class', 'tabcontent');
+  ifrm.style.display = "none";
+  ifrm.style.visibility = "hidden";
+  ifrm.innerHTML = document.body.innerHTML;
+
+  document.body.innerHTML='<div id="sink" class="sinkright"><span onclick="var el1 = document.getElementById(\'orisource\'); document.body.innerHTML=el1.innerHTML;">&nbsp;&nabla;&nbsp;</span><span class="tooltiptext">Sink '+TabType+TabNum+'</span></div>';
+
+  document.body.innerHTML+=el.querySelector('#TabFrame').innerHTML;
+
+  var el1 = document.getElementById('sink');
+  el1.parentNode.insertBefore(ifrm, el1);
+}
+
+
+// TODO: Fix slow interaction speed with 5 or more parallel connections in SIAB (siab task)
+function addTab(evt,TabType) {
+
+  tabTypeNum[assocIndex(tabTypeList,TabType)]+=1;
+
+  var TabNum=tabTypeNum[assocIndex(tabTypeList,TabType)];
+  var TabWidth=tabTypeSizeX[assocIndex(tabTypeList,TabType)];
+  var TabHeight=tabTypeSizeY[assocIndex(tabTypeList,TabType)];
+  var TabSrc=tabTypeSrc[assocIndex(tabTypeList,TabType)];
+  var TabMax=tabTypeMax[assocIndex(tabTypeList,TabType)];
+
+  if(TabNum<=tabTypeMax[assocIndex(tabTypeList,TabType)]) {
+    
+    var ibut = document.createElement('button');
+    ibut.setAttribute('class', 'tablink-'+TabType);
+    ibut.setAttribute('id', 'button' + TabType + TabNum);
+    ibut.setAttribute('onclick', "openTab(event, '" + TabType + "'," + TabNum + ")");
+    ibut.innerHTML=TabType + TabNum;
+
+    parseSetButtonStyle(ibut,TabType,"normal","hover");
+
+    var ifrm = document.createElement('div');
+    ifrm.setAttribute('id', TabType + TabNum);
+    ifrm.setAttribute('class', 'tabcontent');
+    ifrm.style.display = "block";
+    ifrm.style.visibility = "hidden"
+
+    // TODO: Replace with properly decorated code
+    ifrm.innerHTML='<div id="TabFrame"><iframe id="TabFrameInner" width="' + TabWidth + '" height="' + TabHeight + '" frameborder="0" src="'+ TabSrc +'?term=' + TabType + TabNum +'&screenWidth='+screen.width+'&screenHeight='+screen.height+'" allowfullscreen></iframe></div>'
+    ifrm.innerHTML+='<div class="topright1"><span onclick="delTab(event,\''+TabType+'\','+TabNum+');">&nbsp;&Chi;&nbsp;</span><span class="tooltiptext">Close '+TabType+TabNum+'</span></div>'
+    ifrm.innerHTML+='<div class="topright2"><span onclick="projectTab(event,\''+TabType+'\','+TabNum+');">&nbsp;&Omicron;&nbsp;</span><span class="tooltiptext">Project '+TabType+TabNum+'</span></div>'
+    ifrm.innerHTML+='<div class="topright3"><span onclick="maxTab(event,\''+TabType+'\','+TabNum+');">&nbsp;&Delta;&nbsp;</span><span class="tooltiptext">Float '+TabType+TabNum+'</span></div>'
+    ifrm.innerHTML+='<div class="topright4"><span onclick="minTab(event,\''+TabType+'\','+TabNum+');">&nbsp;&nabla;&nbsp;</span><span class="tooltiptext">Sink '+TabType+TabNum+'</span></div>'
+ 
+    var el1 = document.getElementById('addNewDiv');
+    el1.parentNode.insertBefore(ifrm, el1);
+
+    var el2 = document.getElementById('add' + TabType + 'Button');
+    el2.parentNode.insertBefore(ibut, el2);
+
+    document.getElementById('button' + TabType + TabNum).click();
+  }
+  if(TabNum>=TabMax) {
+
+    var el1 = document.getElementById('add' + TabType + 'Button');
+    el1.style.display="none";
+
+  }
+}
+
+
+function delTab(event,TabType,TabNum) {
+
+  tabTypeMax[assocIndex(tabTypeList,TabType)]+=1;
+
+  var TabMax=tabTypeMax[assocIndex(tabTypeList,TabType)];
+
+  var el=null;
+
+  el = document.getElementById('button'+TabType+TabNum);
+  el.remove();
+
+  el = document.getElementById(TabType+TabNum);
+  el.remove();
+
+  el = document.getElementById('add' + TabType + 'Button');
+  el.style.display="inline";
+
+  // Activate other tab types, just in case no TabType tab remains
+  var typeIndex=0, index=0;
+  while(typeIndex<=tabTypeList.length) {
+    if (tabTypeList[typeIndex]!=TabType) {
+      for(index=tabTypeNum[typeIndex];index<=tabTypeMax[typeIndex];index++) {
+        el = document.getElementById('button'+tabTypeList[typeIndex]+index);
+        try {
+          if(typeof el !== 'undefined' && el !== null) {
+            el.click();
+          }
+        }
+        catch(err) {
+          // TODO: Log the error
+        }
+      }
+    }
+    typeIndex+=1;
+  }
+
+  // Now see if any of the given type is alive?
+  // Nearest neighbor to the right
+  for(index=TabMax-1;index>=TabNum+1;index--) {
+    el = document.getElementById('button'+TabType+index);
+    try {
+      if(typeof el !== 'undefined' && el !== null) {
+        el.click();
+      }
+    }
+    catch(err) {
+      // TODO: Log the error
+    }
+  }
+  // Nearest neighbor to the left
+  for(index=1;index<=TabNum-1;index++) {
+    el = document.getElementById('button'+TabType+index);
+    try {
+      if(typeof el !== 'undefined' && el !== null) {
+        el.click();
+      }
+    }
+    catch(err) {
+      // TODO: Log the error
+    }
+  }
+}
+
+// Initialize the buttons is init property is set
+function initLayer() {
+  var numIndex=0,initCount=0;
+
+  var TabType=null,ibut=null,el=null;
+
+  while(numIndex<tabTypeList.length) {
+    TabType=tabTypeList[numIndex];
+    ibut = document.createElement('button');
+    ibut.setAttribute('class', 'add' + TabType);
+    ibut.setAttribute('id', 'add' + TabType + 'Button');
+    ibut.setAttribute('onclick', "addTab(event, '" + TabType + "')");
+    ibut.innerHTML='Add ' + TabType + '...';
+
+    parseSetButtonStyle(ibut,TabType,"add","addHover");
+
+    el = document.getElementById('addNewButton');
+    el.parentNode.insertBefore(ibut, el);
+
+    for(initCount=0;initCount<tabTypeInit[numIndex];initCount++) {
+      el=document.getElementById('add' + TabType + 'Button');
+      try {
+        if(typeof el !== 'undefined' && el !== null) {
+          el.click();
+        }
+      }
+      catch(err) {
+        // TODO: Log the error
+      }
+ 
+      // Keep the first tab of the type active
+      el=document.getElementById('button' + TabType + tabTypeStartNum[numIndex]);
+      try {
+        if(typeof el !== 'undefined' && el !== null) {
+          el.click();
+        }
+      }
+      catch(err) {
+        // TODO: Log the error
+      }
+    }
+
+    numIndex+=1;
+  }
+
+  return 0;
+}
+
+initLayer();
+
+// TODO: Create menu dropdown effects for non-leaf level layers
+
+</script>
+</body>
+</html> 

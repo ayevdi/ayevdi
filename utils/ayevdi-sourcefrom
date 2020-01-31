@@ -1,0 +1,67 @@
+# AYESEC:POST_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+# AYESEC:STATUTORY_HEADER
+if [ "${ayevdi_sourcefrom}" != "${HOME}/.ayevdi/ayevdi-sourcefrom" ]
+then
+  echo "AyeVDI by https://ayeai.xyz"
+  echo "Copyright (C) 2019-2020 Abhishek Choudhary, Dr Srija Katta"
+  echo ""
+  echo "NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only)"
+  echo "Further usage of these software, artifacts or methods"
+  echo "are subject to the 'latest' license agreement avaialble at"
+  echo "https://raw.githubusercontent.com/ayeai/spl/master/LICENSE"
+  echo ""
+  echo "AyeVDI not activated. Please use the following command to"
+  echo "activate AyeVDI"
+  echo '  ayesh=$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O${ayesh} -q && . ${ayesh}'
+  echo ""
+  exit
+fi
+# AYESEC:STATUTORY_HEADER_COMPLETED
+# AYESEC:PREV_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+
+export ayescript=$(tempfile)
+
+if [ "$1" != "bsf" ]
+then
+  wget $1 -O- -q >${ayescript}
+  # Sourcing the validator and logger in sourcefrom directly leads to
+  # namespace collision - bash does not support detection of such conflicts
+  # hence, it is best to execute helper scripts and restore original $ayescript
+  export ayetemp=${ayescript}
+  mkdir -p ${HOME}/.ayevdi/validator
+  validator ${ayescript} >${HOME}/.ayevdi/validator/ayevdi-validator.$(basename ${ayetemp}) 
+  export ayescript=${ayetemp}
+  cat ${HOME}/.ayevdi/validator/ayevdi-validator.$(basename ${ayetemp}) | (if [ 0 -lt $(grep AYESEC:ERROR | wc -l) ];
+  then
+    logger "AYESEC:ERROR:Abort! Abort! Abort!"
+    export ayescript=${ayetemp}
+    echo ""
+    echo "WARNING: AyeVDI has detected an error, that may be a potential threat!"
+    echo "Abort! Abort! Abort! Exiting shell in 10 secs... Press ctrl-c to stop abort..."
+    sleep 10
+    logger "Aborting on AYESEC:ERROR"
+    export ayescript=${ayetemp}
+    echo "Aborting on AYESEC:ERROR"
+    cp ${HOME}/.ayevdi/validator/ayevdi-validator.$(basename ${ayescript}) ${HOME}/.ayevdi/ayevdi-error.fatal
+  else
+    logger "Sourcing ${1} as ${ayetemp} with options $@"
+    export ayescript=${ayetemp}
+  fi)
+  
+else
+  # TBD: logger and validator (or other stuff sourced bsf) are passed without validation
+  # Some lightweigth non race option needed for validating those
+  wget $2 -O- -q >${ayescript}
+fi
+
+if [ -e ${HOME}/.ayevdi/ayevdi-error.fatal ]
+then
+  if [ "$1" != "bsf" ]
+  then
+    echo "AYESEC:Unresolved fatal validation error detected. Not sourcing ${1} as ${ayetemp}"
+    logger "AYESEC:Unresolved fatal validation error detected. Not sourcing ${1} as ${ayetemp}"
+    export ayescript=${ayetemp}
+  fi
+else
+  source ${ayescript} "$@"
+fi

@@ -1,0 +1,172 @@
+# AYESEC:POST_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+# AYESEC:STATUTORY_HEADER
+if [ "${ayevdi_sourcefrom}" != "${HOME}/.ayevdi/ayevdi-sourcefrom" ]
+then
+  echo "AyeVDI by https://ayeai.xyz"
+  echo "Copyright (C) 2019-2020 Abhishek Choudhary, Dr Srija Katta"
+  echo ""
+  echo "NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only)"
+  echo "Further usage of these software, artifacts or methods"
+  echo "are subject to the 'latest' license agreement avaialble at"
+  echo "https://raw.githubusercontent.com/ayeai/spl/master/LICENSE"
+  echo ""
+  echo "AyeVDI not activated. Please use the following command to"
+  echo "activate AyeVDI"
+  echo '  ayesh=$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O${ayesh} -q && . ${ayesh}'
+  echo ""
+  exit
+fi
+# AYESEC:STATUTORY_HEADER_COMPLETED
+# AYESEC:PREV_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+
+# ayevdi
+# Virtualized Deployment IaaS (VDI) by AyeAI
+# 
+# NOTICE
+# Copyright (C) 2019 Abhishek Choudhary
+# 
+# To all WHO IT MAY CONCERN,
+# Greetings,
+# All artifacts and methods in this project are offered with 
+# NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only),
+# subject to the jurisdictions of courts in Hyderabad, India,
+# and solely in accordance with AyeAI SPL version 1, or later,
+# as expressed at the follow URL and at the most current update
+# https://raw.githubusercontent.com/ayeai/spl/master/LICENSE
+# incuding its clauses of automatic implicit update of license,
+# and unless in conflict the terms and conditions of GNU GPL v2
+# shall apply with no retort to other GPL licenses, AND, These
+# terms and conditions are implied read, understood and accepted
+# by the access, or usage of these artifacts and methods which
+# must STRICTLY be IN ACCORDANCE, and this notice must be 
+# reproduced in derivatives along with the original assertions
+# of copyrights.
+
+ayeai_spl_show_copyright() {
+  echo "Copyright (C) 2019 Abhishek Choudhary"
+  echo ""
+}
+
+ayeai_spl_notice() {
+  echo "AyeAI has created this script only as a support utility"
+  echo "to improve the user experience for users using the AyeVDI"
+  echo "platform in accordance with AyeAI SPL version 1 or later."
+  echo "https://raw.githubusercontent.com/ayeai/spl/master/LICENSE"
+  echo "AyeAI may not in any way be associated with the third party"
+  echo "providers and NO WARRANTY on any SLAs or privacy levels are"
+  echo "asserted with regards to such services."
+  echo ""
+}
+
+ayeai_spl_3rd_party_eula() {
+  eula_url=${1}
+  site_url=${2}
+
+  echo "The software referenced in this utility may be governed by"
+  echo "the legal agreement available at"
+  echo ${eula_url}
+  echo "or at other locations as specified by"
+  echo ${site_url}
+  echo ""
+}
+
+ayeai_spl_choice() {
+  echo "By proceeding to use this software you accept the terms"
+  echo "and conditions of the above agreements, and acknowledge to"
+  echo "have read and understood the same. You further indemnify"
+  echo "AyeAI and its affiliates against any liabilities to your"
+  echo "person or property, or to the person or property of others."
+  echo "Not acceptating this agreement DOES NOT IMPACT your other"
+  echo "agreements with AyeAI and its affiliates, or with other"
+  echo "third party providers."
+  echo ""
+}
+
+ayeai_spl_custom_config_notice () {
+  howto_url=${1}
+  tool_prog=${2}
+
+  echo "This utility will autofill or select certain options so"
+  echo "that you have a seamless experience. If you do not agree"
+  echo "with the defaults selected, please DO NOT use this utility."
+  echo "You may also execute the program yourself directly from"
+  echo ${tool_prog}
+  echo "or as specified at"
+  echo ${howto_url}
+  echo ""
+}
+
+ayeai_spl_respectful_denial() {
+  echo "You have opted to not accept the terms and conditions."
+  echo "We respect that! Please note that this does not"
+  echo "invalidate your other existing agreements with AyeAI."
+  echo ""
+}
+
+ayeai_tool_init_3rd_party_custom() {
+  eula_url=${1}
+  site_url=${2}
+  howto_url=${3}
+  tool_prog=${4}
+  
+  ayeai_spl_show_copyright
+  ayeai_spl_notice
+  ayeai_spl_3rd_party_eula ${eula_url} ${site_url}
+  ayeai_spl_choice
+  ayeai_spl_custom_config_notice ${howto_url} ${tool_prog}
+}
+
+ayedisk_unset_home () {
+  export AYEDISK_HOME=${HOME} &&\
+  echo "Your persistent disk is unset."
+  echo ""
+}
+
+ayedisk_confirm_activate() {
+  service=${1}
+  tool_prog=${2}
+  tool_options=${3}
+  install_prog=${4}
+  auth_prog=${5}
+
+  read -p "Do you wish to proceed at your own risk? (y/N) " choice
+  echo ""
+  if [ "${choice}" = "y" ] || [ "${choice}" = "Y" ]
+  then
+    export AYEDISK_HOME=${HOME}/ayework/${service}
+    if [ ! -f ${tool_prog} ]
+    then
+      ${install_prog}
+    fi
+
+    if [ -e ${HOME}/ayework/${service} ]
+    then
+      echo "${service} or ${tool_prog} already running?"
+    else
+      mkdir -p ${HOME}/ayework/
+      ${auth_prog} ${AYEDISK_HOME}
+    fi
+    ${tool_prog} ${tool_options} &&\
+    echo "Your persistent disk is available at" &&\
+    echo ${AYEDISK_HOME} ||\
+    ( echo "AyeVDI: Error starting " ${tool_prog} &&\
+    ayedisk_unset_home )
+  else
+    ayeai_spl_respectful_denial
+    ayedisk_unset_home
+  fi
+}
+
+ayedisk_activate_profile() {
+  service=${1}
+  tool_prog=${2}
+  tool_options=${3}
+  install_prog=${4}
+  auth_prog=${5}
+  eula_url=${6}
+  site_url=${7}
+  howto_url=${8}
+
+  ayeai_tool_init_3rd_party_custom ${eula_url} ${site_url} ${howto_url} ${tool_prog}
+  ayedisk_confirm_activate  ${service} ${tool_prog} ${tool_options} ${install_prog} ${auth_prog}
+}

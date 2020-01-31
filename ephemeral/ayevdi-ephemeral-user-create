@@ -1,0 +1,104 @@
+#!/bin/bash
+# AYESEC:POST_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+# AYESEC:STATUTORY_HEADER
+if [ "${ayevdi_sourcefrom}" != "${HOME}/.ayevdi/ayevdi-sourcefrom" ]
+then
+  echo "AyeVDI by https://ayeai.xyz"
+  echo "Copyright (C) 2019-2020 Abhishek Choudhary, Dr Srija Katta"
+  echo ""
+  echo "NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only)"
+  echo "Further usage of these software, artifacts or methods"
+  echo "are subject to the 'latest' license agreement avaialble at"
+  echo "https://raw.githubusercontent.com/ayeai/spl/master/LICENSE"
+  echo ""
+  echo "AyeVDI not activated. Please use the following command to"
+  echo "activate AyeVDI"
+  echo '  ayesh=$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O${ayesh} -q && . ${ayesh}'
+  echo ""
+  exit
+fi
+# AYESEC:STATUTORY_HEADER_COMPLETED
+# AYESEC:PREV_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+
+# NOTE: Earlier versions of this script gave sudo privs
+# WARNING: Do NOT give sudo access to users from AyeVDI scripts
+# TODO: Write a filter to test whether any AyeVDI script give sudo privs
+
+# These commands should not be run at every instance - only the first time
+if [ ! -e ${HOME}/.ayevdi/ayevdi-ephemeral-user-setup.done ]
+then
+
+  # TBD: Create abstraction to call other containerization infra
+  # like Singularity or AyeCons
+  
+  # Install docker.io and enable docker service
+  logger "Installing docker.io"
+  sudo apt update -y
+  sudo apt install -y docker.io
+  # TBD: Adding the docker group should be an one time affair, shouldn't it?
+  # TODO: Test functionality with fresh install and update here
+  sudo groupadd docker
+  sudo systemctl enable docker &&\
+  logger "SUCESS:INSTALL:docker.io"
+  # TBD: Abstract installation and validation
+
+  sudo apt install -y lolcat expect gawk sharutils
+  sudo ln -sf /usr/games/lolcat /usr/bin/lolcat
+  
+  # TODO: Here, and elsewhere, whenever installing something ensure the following?
+  # TODO:        1. Whether installation was successful?
+  # TODO:        2. Whether the version dependencies are met?
+  # TODO:        3. Whether the expected functionality are met?
+  # TODO:        4. Whether safety and security advisories are met?
+  # TODO:        5. Whether patching is at correct level?
+  
+  date +%s >${HOME}/.ayevdi/ayevdi-ephemeral-user-setup.done
+  # TODO: Use the install or setup timestamps to check for updates and refreshes needed
+fi
+
+# Generate ephemeral user id
+# TODO: User creation does not seem to be properly reentrant in Ubuntu 18.04 - see history of this file
+# TODO: Possible busy wait, or at least infinite loop likely.
+export addusrres=1
+while [ ${addusrres} -ne 0 ]
+do
+  export uuid=ayevdi_$(date +%s)_$RANDOM
+  sudo deluser ${uuid}
+  sudo delgroup ${uuid}
+  sudo rm -rf /home/${uuid}
+  sleep 0.5
+  sudo adduser --disabled-password --gecos "" ${uuid} && (echo ${uuid}:ayeaye | sudo chpasswd)
+  sleep 0.7
+  # TODO: Add error checks
+  # Now check whether the user is sane
+  sudo -u ${uuid} ls >/dev/null 2>&1
+  export addusrres=$?
+  sleep 0.3
+done
+logger "EPHEMERAL:CREATE:Created user ${uuid}"
+
+# Enable the new user to execute docker commands
+logger "EPHEMERAL:DOCKERPRIV:Enabling docker privileges for ${uuid}"
+sudo mkdir -p /home/${uuid}/.docker
+sudo chown ${uuid}:${uuid} /home/${uuid}/.docker -R
+sudo chmod g+rwx /home/${uuid}/.docker -R
+sudo usermod -aG docker ${uuid} &&\
+logger "SUCCESS:CONFIG:docker privileges"
+
+# Activate AyeVDI and set to autoload
+HOME=/home/${uuid} USER=${uuid} sudo -u ${uuid} bash -lci 'ayesh=$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O${ayesh} -q && . ${ayesh} &&\
+                   . ${HOME}/.ayevdi/ayevdi-sourcefrom https://bit.ly/ayevdi-host-autoload'
+
+echo "Created and activated user ${uuid}"
+
+# TBD: Does ephemeral user need sudo privilegess? Not safe!
+# TODO: Decide and uncomment below or delete these 3 lines
+# Note: Commenting out for now s per above
+# sudo usermod -aG sudo ${uuid}
+# Update: Not needed! Please do NOT delete this comment
+
+# TBD: Does it require a newgrp?
+# TODO: Decide and update - commenting out for now
+# Note: newgrp drops into a new shell - that can terminate execution flow
+# newgrp docker
+# Update: Not needed! Please do NOT delete this comment

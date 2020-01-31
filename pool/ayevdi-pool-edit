@@ -1,0 +1,68 @@
+#!/bin/bash
+# AYESEC:POST_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+# AYESEC:STATUTORY_HEADER
+if [ "${ayevdi_sourcefrom}" != "${HOME}/.ayevdi/ayevdi-sourcefrom" ]
+then
+  echo "AyeVDI by https://ayeai.xyz"
+  echo "Copyright (C) 2019-2020 Abhishek Choudhary, Dr Srija Katta"
+  echo ""
+  echo "NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only)"
+  echo "Further usage of these software, artifacts or methods"
+  echo "are subject to the 'latest' license agreement avaialble at"
+  echo "https://raw.githubusercontent.com/ayeai/spl/master/LICENSE"
+  echo ""
+  echo "AyeVDI not activated. Please use the following command to"
+  echo "activate AyeVDI"
+  echo '  ayesh=$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O${ayesh} -q && . ${ayesh}'
+  echo ""
+  exit
+fi
+# AYESEC:STATUTORY_HEADER_COMPLETED
+# AYESEC:PREV_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+
+if [ "${2}" == "" ]
+then
+
+  echo Usage: ayevdi-pool-edit port repo-url
+
+else
+
+  mkdir -p ${HOME}/.ayevdi/repo
+
+  #Lets ensure we've got a fresh clone of the repo
+  if [ -e ${HOME}/.ayevdi/repo/ayevdi ]
+  then
+    mv ${HOME}/.ayevdi/repo/ayevdi ${HOME}/.ayevdi/repo/ayevdi_$(date +%s)
+  fi
+
+  if [ "${3}" == "" ]
+  then
+    export ayevdi_repo=https://github.com/ayevdi/ayevdi
+  else
+    export ayevdi_repo=${3}
+  fi
+  git clone ${ayevdi_repo} ${HOME}/.ayevdi/repo/ayevdi
+  
+  pushd ${HOME}/.ayevdi/repo/ayevdi
+
+  export pooltemp=$(tempfile) &&\
+  touch pool/ayevdi-pool-${2} &&\
+  cat pool/ayevdi-pool-${2} |\
+  uudecode |\
+  uudecode |\
+  gpg --batch --passphrase $(sourcefrom https://bit.ly/ayevdi-passkey) >${pooltemp} &&\
+  vi $pooltemp && cat ${pooltemp} |\
+  gpg --batch --passphrase $(sourcefrom https://bit.ly/ayevdi-passkey) -c - |\
+  uuencode - |\
+  uuencode - >pool/ayevdi-pool-${2} &&\
+  git add pool/ayevdi-pool-${2} &&\
+  git commit -m "Updated pool $ayepool" &&\
+  git push &&\
+  export pooltemp=$(date +%s)
+
+  if [ "$(dirs)" != "~" ]
+  then
+    popd
+  fi
+  
+fi

@@ -1,0 +1,43 @@
+# AYESEC:POST_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+# AYESEC:STATUTORY_HEADER
+if [ "${ayevdi_sourcefrom}" != "${HOME}/.ayevdi/ayevdi-sourcefrom" ]
+then
+  echo "AyeVDI by https://ayeai.xyz"
+  echo "Copyright (C) 2019-2020 Abhishek Choudhary, Dr Srija Katta"
+  echo ""
+  echo "NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only)"
+  echo "Further usage of these software, artifacts or methods"
+  echo "are subject to the 'latest' license agreement avaialble at"
+  echo "https://raw.githubusercontent.com/ayeai/spl/master/LICENSE"
+  echo ""
+  echo "AyeVDI not activated. Please use the following command to"
+  echo "activate AyeVDI"
+  echo '  ayesh=$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O${ayesh} -q && . ${ayesh}'
+  echo ""
+  exit
+fi
+# AYESEC:STATUTORY_HEADER_COMPLETED
+# AYESEC:PREV_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+# ह्रैंनौंब्रेह्रोल्रूःऑह्रैंझ्रॄःरौहौक्षिंऑःह्रॄःराःख्रैह्राःद्रुःघ्रूःह्रींबाःखैंह्रौध्रॄंआंह्रिःघोखहॄठःळृंहृःझ्रुचेंह्रुशूःल्रुंह्रॄहेच्रोःह्रुद्रंजेःह्रिंत्रुंज्रःह्रःछिःणंहॄंभ्रेंरेः
+
+# TODO: Derive Godelization rules based on Panini's Ashtadhyayi
+# TODO: Use Romenagri intermediate stage to make it reversible
+
+export base="क ख ग घ च छ ज झ ट ठ ड ढ ण त थ द ध न प फ ब भ म ल ळ व श स ह "
+export mux="}्र "
+export addbase="य र क्ष ज्ञ "
+export mux2=" ा  ि  ी  ु  ू  े  ै  ो  ौ  ृ ॄ "
+export addbase2="अ आ इ ई उ ऊ ऋ ऌ ऎ ए ऐ ऑ ऒ ओ औ	" 
+export mux3="}ं"
+export mux4="}ः"
+export base2=$(for n in ${base}; do printf "${n} ${n}${mux}"; done)${addbase}
+export base3=$(for n in ${base2}; do printf "${n} "; for m in ${mux2}; do printf "${n}${m} "; done; done)${addbase2}
+export base4=$(for n in ${base3}; do printf "${n} ${n}${mux3} "; done | sed 's/}//g')
+export base5=$(for n in ${base3}; do printf "${n} "; for m in ${mux3} ${mux4}; do printf "${n}${m} "; done; done | sed 's/}//g')
+
+export csum=${2}
+for n in {1..17}
+do 
+  echo $csum | awk -vn=$n '{print "obase=2277;"strtonum("0x"substr($1,(n-1)*7+1,7))}'
+done | bc | sed "$(paste -d' ' <(echo {0000..2276} | tr ' ' '\n') <(echo $base5 | tr ' ' '\n' | sort -ur) |\
+awk '{printf "s/" $1 "/" $2 "/g;"};END {print ""}')" | tr '\n' ' ' | sed 's/ //g'

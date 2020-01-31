@@ -1,0 +1,66 @@
+# AYESEC:POST_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+# AYESEC:STATUTORY_HEADER
+if [ "${ayevdi_sourcefrom}" != "${HOME}/.ayevdi/ayevdi-sourcefrom" ]
+then
+  echo "AyeVDI by https://ayeai.xyz"
+  echo "Copyright (C) 2019-2020 Abhishek Choudhary, Dr Srija Katta"
+  echo ""
+  echo "NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only)"
+  echo "Further usage of these software, artifacts or methods"
+  echo "are subject to the 'latest' license agreement avaialble at"
+  echo "https://raw.githubusercontent.com/ayeai/spl/master/LICENSE"
+  echo ""
+  echo "AyeVDI not activated. Please use the following command to"
+  echo "activate AyeVDI"
+  echo '  ayesh=$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O${ayesh} -q && . ${ayesh}'
+  echo ""
+  exit
+fi
+# AYESEC:STATUTORY_HEADER_COMPLETED
+# AYESEC:PREV_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+
+sourcefrom http://bit.ly/ayevdi-host-user-setup
+
+# Setup the system inside the container
+
+#TODO: Use docker-compose
+docker pull ubuntu
+
+# Stop all running caintainers TBD: Why?
+#docker container stop $(docker container ls -aq)
+
+# Purge the container named ayevdi
+docker container stop ayevdi
+docker container rm ayevdi
+
+# Start a conatiner with latest Ubuntu - TBD: We needed 18.04 specifically?
+docker run --name ayevdi -dt ubuntu:latest
+docker exec -it ayevdi apt update -y
+docker exec -it ayevdi apt upgrade -y
+docker exec -it ayevdi apt auto-remove -y
+
+docker exec -it ayevdi apt install -y expect sudo curl wget git lolcat sharutils gpg
+docker exec -it ayevdi ln -sf /usr/games/lolcat /usr/bin
+docker exec -it ayevdi ln -sf /root/.ayevdi/ayevdi-sourcefrom /usr/bin/sourcefrom
+docker exec -it ayevdi bash -lci 'ayesh=$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O${ayesh} -q && . ${ayesh} && chmod 777 /root/.ayevdi/ayevdi-sourcefrom && sourcefrom https://bit.ly/ayevdi-host-autoload'
+docker exec -it ayevdi bash -lci 'sourcefrom https://bit.ly/ayevdi-mascot'
+
+# Manual shell
+# TBD: Do we need a manual shell for basic clean image?
+# Uncomment the line below to enable dropping into manual shell
+# docker exec -it ayevdi /bin/bash
+
+# The ayevdi basic setup can take a while
+docker exec -it ayevdi bash -lci 'sourcefrom https://bit.ly/ayevdi-setup-basic' 
+
+# Clean up
+docker exec -it ayevdi bash -lci ' history -c'
+
+export cntr_id=$(docker ps -a | grep ayevdi$ | cut -d' ' -f1)
+export cntr_tag=$(date +%s)
+docker commit -m "Created ayevdi" -a "Team AyeAI" $cntr_id ayeai/ayevdi:$cntr_tag
+
+docker images | grep $cntr_tag
+docker login &&\
+docker push ayeai/ayevdi:$cntr_tag
+

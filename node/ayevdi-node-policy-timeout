@@ -1,0 +1,58 @@
+#!/bin/bash
+# AYESEC:POST_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+# AYESEC:STATUTORY_HEADER
+if [ "${ayevdi_sourcefrom}" != "${HOME}/.ayevdi/ayevdi-sourcefrom" ]
+then
+  echo "AyeVDI by https://ayeai.xyz"
+  echo "Copyright (C) 2019-2020 Abhishek Choudhary, Dr Srija Katta"
+  echo ""
+  echo "NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only)"
+  echo "Further usage of these software, artifacts or methods"
+  echo "are subject to the 'latest' license agreement avaialble at"
+  echo "https://raw.githubusercontent.com/ayeai/spl/master/LICENSE"
+  echo ""
+  echo "AyeVDI not activated. Please use the following command to"
+  echo "activate AyeVDI"
+  echo '  ayesh=$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O${ayesh} -q && . ${ayesh}'
+  echo ""
+  exit
+fi
+# AYESEC:STATUTORY_HEADER_COMPLETED
+# AYESEC:PREV_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+
+# Prevent non-starter in wrongly configured or sandbox setups
+# It is meaningless giving less than 10 seconds timelimit
+if [ ${timelimit} -lt 10 ]
+then
+  export timelimit=10
+  echo Using default timelimit=10s. To modify set timelimit=t
+fi
+
+# Prevent thrashing in wrongly configured environments
+# External delay can be reduced by the delay specified below
+echo Waiting for 10s to prevent thrashing...
+sleep 10
+
+sourcefrom https://bit.ly/ayevdi-node-runstats | tail -n +2 | awk -F',' -v timelimit=${timelimit} '{
+  if ($3 != 0) age=$3; else age=$2; print "age of " $1 " = " age;
+  if (age > timelimit) {
+    system("docker exec -i " $1 " wall -n AyeVDI warning: Your current session timelimit has been exhausted. Session is being disconnected. Please refresh page to launch a new session.");
+    system("docker stop " $1);
+    print $1 ",stop attempted"
+  }
+  else {
+    if ( 60 >= (timelimit - age) ) {
+      system("docker exec -i " $1 " wall -n AyeVDI warning: Your current session has less than 1 minute remaining. Please save your work.")
+      print $1 ", 1 min warning"
+    }
+    else {
+      if ( 120 >= (timelimit - age)) {
+        system("docker exec -i " $1 " wall -n AyeVDI warning: Your current session has less than 2 minutes remaining. Please save your work.")
+        print $1 ", 2 mins warning"
+      }
+      else {
+        print $1 "," (timelimit - age) " remaining"
+      }
+    }
+  }
+}'

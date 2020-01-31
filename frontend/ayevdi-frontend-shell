@@ -1,0 +1,46 @@
+#!/bin/bash
+# AYESEC:POST_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+# AYESEC:STATUTORY_HEADER
+if [ "${ayevdi_sourcefrom}" != "${HOME}/.ayevdi/ayevdi-sourcefrom" ]
+then
+  echo "AyeVDI by https://ayeai.xyz"
+  echo "Copyright (C) 2019-2020 Abhishek Choudhary, Dr Srija Katta"
+  echo ""
+  echo "NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only)"
+  echo "Further usage of these software, artifacts or methods"
+  echo "are subject to the 'latest' license agreement avaialble at"
+  echo "https://raw.githubusercontent.com/ayeai/spl/master/LICENSE"
+  echo ""
+  echo "AyeVDI not activated. Please use the following command to"
+  echo "activate AyeVDI"
+  echo '  ayesh=$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O${ayesh} -q && . ${ayesh}'
+  echo ""
+  exit
+fi
+# AYESEC:STATUTORY_HEADER_COMPLETED
+# AYESEC:PREV_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+
+# TODO: Replace extip with fully qualified name
+export extip=$(dig @resolver1.opendns.com ANY myip.opendns.com +short)
+
+# Start only if not found
+wget --no-cache -O/dev/null -q http://${extip}:${ayesid}:4202
+if [ $? -gt 0 ]
+then
+
+  sourcefrom https://bit.ly/ayevdi-daemon-start "ayevdi-service-shellTerminal" "shellinaboxd --disable-ssl --css /etc/shellinabox/options-enabled/00_White\ On\ Black.css -p 4203 -s \"/:$(id -u):$(id -g):${PWD}:/bin/bash -lci 'clear && sourcefrom http://bit.ly/ayevdi-backend-shell && while :; do printf .; sleep 60; done'\""
+
+  # Wait for shell server to be ready
+  wget --no-cache -O/dev/null -q http://${extip}:4203
+  while [ $? -gt 0 ]
+  do
+    echo Waiting for ayevdi-service-shellTerminal server...
+    sleep 1
+    wget --no-cache -O/dev/null -q http://${extip}:4203
+  done
+fi
+
+#The last two lines must carry the urls for shell and gui terminals respectively
+echo AyeVDI by AyeAI https://ayeai.xyz
+echo http://${extip}:4203 gives ephemeral shell sessions
+echo http://${extip}:4203 gives ephemeral shell only

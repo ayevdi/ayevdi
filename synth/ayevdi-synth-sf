@@ -1,0 +1,156 @@
+# AYESEC:POST_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+# AYESEC:STATUTORY_HEADER
+if [ "${ayevdi_sourcefrom}" != "${HOME}/.ayevdi/ayevdi-sourcefrom" ]
+then
+  echo "AyeVDI by https://ayeai.xyz"
+  echo "Copyright (C) 2019-2020 Abhishek Choudhary, Dr Srija Katta"
+  echo ""
+  echo "NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only)"
+  echo "Further usage of these software, artifacts or methods"
+  echo "are subject to the 'latest' license agreement avaialble at"
+  echo "https://raw.githubusercontent.com/ayeai/spl/master/LICENSE"
+  echo ""
+  echo "AyeVDI not activated. Please use the following command to"
+  echo "activate AyeVDI"
+  echo '  ayesh=$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O${ayesh} -q && . ${ayesh}'
+  echo ""
+  exit
+fi
+# AYESEC:STATUTORY_HEADER_COMPLETED
+# AYESEC:PREV_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+
+# TODO: Validate the inputs
+
+# Note: Synthesis is not always possible across all technnologies
+
+export target_script=${1}
+export synth_dir=${2}
+
+if [ "${3}" == "" ]
+then
+  export synth_depth=1
+else
+  export synth_depth=${3}
+fi
+
+if [ ${synth_depth} -eq 1 ]
+then
+  mv ${synth_dir} ${synth_dir}_$(date +%s)
+  mkdir -p ${synth_dir}
+
+  mkdir -p ${synth_dir}/call_graph
+  mkdir -p ${synth_dir}/scripts
+  pushd ${synth_dir}/call_graph >/dev/null
+fi
+
+pushd ${synth_dir}/scripts >/dev/null
+  echo "Processing --> ${target_script} (depth=${synth_depth})"
+  # TODO: make removal of AYESEC optional with | grep -v "^# AYESEC"
+  export locals_pat=$(for n in $(wget -O- -q ${target_script} | grep sourcefrom | tr " '" '\n' | grep http | sed 's/[")&|;]//g'); do printf "s/$(echo ${n} | sed 's/\//\\\//g')/$(basename ${n})/g; "; done)
+  echo "#!/bin/bash" >$(basename ${target_script})
+  echo "# Synthesized from ${target_script} @$(date +%s)" >>$(basename ${target_script})
+  echo "# Distribution in synthesized form is not allowed" >>$(basename ${target_script})
+  echo "# Synthesized form does not subscribe to upstream updates" >>$(basename ${target_script})
+  echo "# Original license conditions apply, except right to redistribute" >>$(basename ${target_script})
+  echo "# NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only)" >>$(basename ${target_script})
+  echo "" >>$(basename ${target_script})
+  wget -O- ${target_script} | sed "${locals_pat}" >>$(basename ${target_script})
+  echo "" >>$(basename ${target_script})
+  validator $(basename ${target_script}) | sed 's/^/# /g' >>$(basename ${target_script})
+  sed -i "s/sourcefrom/source/g" $(basename ${target_script})
+
+  # Fix above conversion for ayevdi-sourcefrom
+  sed -i "s/ayevdi-source/ayevdi-sourcefrom/g; s/ayevdi_source/ayevdi_sourcefrom/g;" $(basename ${target_script})
+popd >/dev/null
+
+# Now, synthesize the dependencies
+export synth_depth=$(expr ${synth_depth} + 1)
+mkdir -p $(basename ${target_script})
+pushd $(basename ${target_script}) >/dev/null
+for n in $(echo ${locals_pat} | sed 's/\\\//\//g' | tr ';' ' ' | tr ' ' '\n' | rev | cut -d'/' -f3- | rev | cut -d'/' -f2- | tr -s '\n' | tr '\n' ' ')
+do
+  source ~/synth ${n} ${synth_dir} ${synth_depth}
+done
+export synth_depth=$(expr ${synth_depth} - 1)
+popd >/dev/null
+
+if [ ${synth_depth} -eq 1 ]
+then
+  popd >/dev/null
+
+  # Reset the target in case this script was sourced
+  export target_script=${1}
+
+  pushd ${synth_dir} >/dev/null
+  tree call_graph
+
+  # Flatten the scripts into functions
+  echo "#!/bin/bash" >$(basename ${target_script})
+  echo "# Synthesized from ${target_script} @$(date +%s)" >>$(basename ${target_script})
+  echo "# Distribution in synthesized form is not allowed" >>$(basename ${target_script})
+  echo "# Synthesized form does not subscribe to upstream updates" >>$(basename ${target_script})
+  echo "# Original license conditions apply, except right to redistribute" >>$(basename ${target_script})
+  echo "# NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only)" >>$(basename ${target_script})
+  echo "" >>$(basename ${target_script})
+
+  for n in $(ls scripts)
+  do
+    echo "${n}() {" >>$(basename ${target_script})
+    cat scripts/${n} >>$(basename ${target_script})
+    echo "}" >>$(basename ${target_script})
+    echo "" >>$(basename ${target_script})
+  done
+
+  echo "echo Synthesized from ${target_script} @$(date +%s)" >>$(basename ${target_script})
+  echo "echo Distribution in synthesized form is NOT allowed" >>$(basename ${target_script})
+  echo "echo Synthesized form does not subscribe to upstream updates" >>$(basename ${target_script})
+  echo "echo Original license conditions apply, except right to redistribute" >>$(basename ${target_script})
+  echo "echo NO WARRANTY, and ZERO LIABILITY \(Limited to INR 1/- only\)" >>$(basename ${target_script})
+  echo "echo ''" >>$(basename ${target_script})
+
+  # Convert source calls into function calls
+  for n in $(ls scripts | sort -ur)
+  do
+    sed -i "s/source ${n}/${n} synth/g" $(basename ${target_script})
+  done
+
+  # Create flattened versions of all scripts - brute force
+  mkdir -p flats
+
+  # TODO: Use call graph to improve code redundancy
+  for n in $(ls scripts)
+  do
+    cat $(basename ${target_script}) >>flats/${n}
+    echo "${n} synth "'$@' >>flats/${n}
+    chmod 755 flats/${n}
+  done
+
+  echo "$(basename ${target_script}) synth "'$@' >>$(basename ${target_script})
+  chmod 755 $(basename ${target_script})
+
+  # Sanity check
+  diff ayevdi-frontend-gui-rs flats/ayevdi-frontend-gui-rs
+
+  # Install the scripts
+  sudo ln -sf $(pwd)/flats/* /usr/bin/
+
+  # Generate the code in other scripts and build native version
+
+  # Python3 bundle
+  git clone https://github.com/ayeai/bash2python
+  python3 bash2python/bash2python.sh.py $(basename ${target_script})
+
+  # shc bundle
+  git clone https://github.com/neurobin/shc
+  pushd shc >/dev/null
+    ./autogen.sh
+    ./configure
+    make
+    sudo make install
+  popd >/dev/null
+
+  which shc
+  shc -f $(basename ${target_script}) -o $(basename ${target_script}).x
+  popd >/dev/null
+
+fi

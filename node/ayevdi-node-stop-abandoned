@@ -1,0 +1,95 @@
+#!/bin/bash
+# AYESEC:POST_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+# AYESEC:STATUTORY_HEADER
+if [ "${ayevdi_sourcefrom}" != "${HOME}/.ayevdi/ayevdi-sourcefrom" ]
+then
+  echo "AyeVDI by https://ayeai.xyz"
+  echo "Copyright (C) 2019-2020 Abhishek Choudhary, Dr Srija Katta"
+  echo ""
+  echo "NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only)"
+  echo "Further usage of these software, artifacts or methods"
+  echo "are subject to the 'latest' license agreement avaialble at"
+  echo "https://raw.githubusercontent.com/ayeai/spl/master/LICENSE"
+  echo ""
+  echo "AyeVDI not activated. Please use the following command to"
+  echo "activate AyeVDI"
+  echo '  ayesh=$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O${ayesh} -q && . ${ayesh}'
+  echo ""
+  exit
+fi
+# AYESEC:STATUTORY_HEADER_COMPLETED
+# AYESEC:PREV_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+
+echo "Gathering statistics"
+export tempstats=$(tempfile)
+sourcefrom https://bit.ly/ayevdi-node-runstats >${tempstats}
+cat ${tempstats}
+
+#for cntr in `docker ps -q`
+for cntr in $(cat ${tempstats} | tail +2 | cut -d',' -f1)
+do
+  # Prevent infant mortality (allow time for containers to start-up and connect)
+  # TODO: This should be tuned to a fair interval
+  # TODO: Tuning here and elsewhere should be AI driven - apply GAs
+  export docktime=$(cat ${tempstats} | grep ${cntr} | cut -d',' -f2)
+  export ayetime=$(cat ${tempstats} | grep ${cntr} | cut -d',' -f3)
+  echo ${cntr},${docktime},${ayetime}
+  
+  # Under high usage it 'can' take a few minutes to provide VDI
+  # We are setting a nominal value of 3 mins = 180 secs
+  # TODO: Tune this parameter
+  if [ ${ayetime} -lt 120 ]
+  then
+    if [ ${docktime} -lt 60 ]
+    then
+      logger "POLICY:ABANDON:INFANT:${cntr} docktime=${docktime} ayetime=${ayetime}"
+      echo "Skipping ${cntr} docktime=${docktime} ayetime=${ayetime}"
+      continue
+    fi
+  fi
+
+  # TBD: Install lsof or kill container if lsof not found?
+  # NOTE: This may be an attempt at bypassing policies, but there may be some valid cases
+  export tmplsofstat=$(docker exec -it ${cntr} which lsof)
+  echo "where? lsof on " ${cntr} "${tmplsofstat}"
+  # TBD: Why is the following form not working?
+  #     if [ "${tmplsofstat}" = "/usr/bin/lsof" ]; then
+  # TODO: RCA the above issue
+  if [ $(echo ${tmplsofstat} | grep lsof | wc -l) -gt 0 ]
+  then
+    echo Found lsof on ${cntr}... Compliant image!
+    logger "POLICY:ABANDON:LSOF:${cntr} Found lsof on ${cntr}... Compliant image!"
+  else
+    echo Installing lsof on ${cntr}... Rouge image?
+    docker exec -it ${cntr} apt install -y lsof   
+    logger "POLICY:ABANDON:LSOF:${cntr} Installing lsof... Rouge image?"
+  fi
+  
+  export tcpstat=$(tempfile)
+  docker exec -it ${cntr} lsof -ai tcp >${tcpstat}
+  echo ${cntr} lsof returned $(cat ${tcpstat} | wc -l) lines
+  export est=$(cat ${tcpstat} | grep vnc | grep ESTABLISHED | wc -l)
+  export vnc=$(cat ${tcpstat} | grep vnc | wc -l)
+  export usr=$(docker exec -it ${cntr} users | wc -l)
+  echo ${cntr} vnc=${vnc} est=${est} usr=${usr}
+  if [ ${vnc} -gt 0 ]
+  then
+    if [ ${est} -lt 1 ]
+    then
+      docker stop ${cntr}
+      echo Stopping abandoned container ${cntr}
+      logger "POLICY:ABANDON:STOP:${cntr} vnc=${vnc} est=${est} usr=${usr}"
+    else
+      logger "POLICY:ABANDON:SKIP:${cntr} vnc=${vnc} est=${est} usr=${usr}"
+    fi
+  else
+    if [ ${usr} -lt 1 ]
+    then
+      docker stop ${cntr}
+      echo Stopping abandoned container ${cntr}
+      logger "POLICY:ABANDON:STOP:${cntr} vnc=${vnc} est=${est} usr=${usr}"
+    else
+      logger "POLICY:ABANDON:SKIP:${cntr} vnc=${vnc} est=${est} usr=${usr}"
+    fi
+  fi
+done

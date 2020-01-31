@@ -1,0 +1,33 @@
+# AYESEC:POST_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+# AYESEC:STATUTORY_HEADER
+if [ "${ayevdi_sourcefrom}" != "${HOME}/.ayevdi/ayevdi-sourcefrom" ]
+then
+  echo "AyeVDI by https://ayeai.xyz"
+  echo "Copyright (C) 2019-2020 Abhishek Choudhary, Dr Srija Katta"
+  echo ""
+  echo "NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only)"
+  echo "Further usage of these software, artifacts or methods"
+  echo "are subject to the 'latest' license agreement avaialble at"
+  echo "https://raw.githubusercontent.com/ayeai/spl/master/LICENSE"
+  echo ""
+  echo "AyeVDI not activated. Please use the following command to"
+  echo "activate AyeVDI"
+  echo '  ayesh=$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O${ayesh} -q && . ${ayesh}'
+  echo ""
+  exit
+fi
+# AYESEC:STATUTORY_HEADER_COMPLETED
+# AYESEC:PREV_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+
+# AYESEC:POST_SHS('3 lines')=91124a68fa9116c645687335cb8ab5b9a422578691e5af29f34eda4862dc5befcae3d094ad03bf696d0c10c761a2b31973449bfe50d57fee42b8235d2b069b8d
+echo "Test-validator"
+logger "Test-validator"
+# NOTE: The following line must contain an INVALID checksum
+# AYESEC:PREV_SHS('3 lines')=91124a68fa9116c645687335cb8ab5b9a422578691e5af29f34eda4862dc5befcae3d094ad03bf696d0c10c761a2b31973449bfe50d57fee42b8235d2b069b8d
+
+# AYESEC:POST_SHS('3 lines')=829afd1136b7e7adf525bd9ccb4c4c9dcb894e129fbcfee1797686f38601d56f94877f6ec1beecab715675ece5312aa066161c1286478980b9e7483d02e4f663
+# NOTE: The above line must contain an INVALID checksum
+echo "Test-validator"
+logger "Test-validator"
+# AYESEC:PREV_SHS('3 lines')=829afd1136b7e7adf525bd9ccb4c4c9dcb894e129fbcfee1797686f38601d56f94877f6ec1beecab715675ece5312aa066161c1286478980b9e7483d02e4f663
+

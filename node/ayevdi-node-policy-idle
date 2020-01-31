@@ -1,0 +1,41 @@
+# AYESEC:POST_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+# AYESEC:STATUTORY_HEADER
+if [ "${ayevdi_sourcefrom}" != "${HOME}/.ayevdi/ayevdi-sourcefrom" ]
+then
+  echo "AyeVDI by https://ayeai.xyz"
+  echo "Copyright (C) 2019-2020 Abhishek Choudhary, Dr Srija Katta"
+  echo ""
+  echo "NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only)"
+  echo "Further usage of these software, artifacts or methods"
+  echo "are subject to the 'latest' license agreement avaialble at"
+  echo "https://raw.githubusercontent.com/ayeai/spl/master/LICENSE"
+  echo ""
+  echo "AyeVDI not activated. Please use the following command to"
+  echo "activate AyeVDI"
+  echo '  ayesh=$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O${ayesh} -q && . ${ayesh}'
+  echo ""
+  exit
+fi
+# AYESEC:STATUTORY_HEADER_COMPLETED
+# AYESEC:PREV_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+
+# NOTE: This uses the triggering of the screen saver to find idle status
+# TODO: Add in appropriate activity trackers that allow non GUI instances to be monitored
+
+echo Looking for idle containers
+for n in $(docker ps -q)
+do
+  echo "Trying " ${n}
+  export tmpres=$(docker exec -it ${n} bash -c "DISPLAY=:1 xprintidle" | sed 's/[^0-9]*//g')
+  echo "Idle time ${tmpres}"
+  # TODO: Get the timeout value as an option
+  if [ 60000 -lt ${tmpres} ]
+  then
+    docker stop ${n}
+    logger "POLICY:IDLE:Stopping ${n}"
+    echo "POLICY:IDLE:Stopping ${n}"
+  else
+    logger "POLICY:IDLE:Skipping ${n}"
+    echo "POLICY:IDLE:Skipping ${n}"
+  fi
+done

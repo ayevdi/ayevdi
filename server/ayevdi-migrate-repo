@@ -1,0 +1,70 @@
+#!/bin//bash
+# AYESEC:POST_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+# AYESEC:STATUTORY_HEADER
+if [ "${ayevdi_sourcefrom}" != "${HOME}/.ayevdi/ayevdi-sourcefrom" ]
+then
+  echo "AyeVDI by https://ayeai.xyz"
+  echo "Copyright (C) 2019-2020 Abhishek Choudhary, Dr Srija Katta"
+  echo ""
+  echo "NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only)"
+  echo "Further usage of these software, artifacts or methods"
+  echo "are subject to the 'latest' license agreement avaialble at"
+  echo "https://raw.githubusercontent.com/ayeai/spl/master/LICENSE"
+  echo ""
+  echo "AyeVDI not activated. Please use the following command to"
+  echo "activate AyeVDI"
+  echo '  ayesh=$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O${ayesh} -q && . ${ayesh}'
+  echo ""
+  exit
+fi
+# AYESEC:STATUTORY_HEADER_COMPLETED
+# AYESEC:PREV_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+
+if [ "${2}" == "" ]
+then
+
+  echo Usage: ayevdi-migrate-repo new-url-base
+
+else
+
+  mkdir -p ${HOME}/.ayevdi/repo
+
+  #Lets ensure we've got a fresh clone of the repo
+  if [ -e ${HOME}/.ayevdi/repo/ayevdi ]
+  then
+    mv ${HOME}/.ayevdi/repo/ayevdi ${HOME}/.ayevdi/repo/ayevdi_$(date +%s)
+  fi
+
+  if [ "${3}" == "" ]
+  then
+    export ayevdi_repo=https://github.com/ayevdi/ayevdi
+  else
+    export ayevdi_repo=${3}
+  fi
+  git clone ${ayevdi_repo} ${HOME}/.ayevdi/repo/ayevdi
+  
+  pushd ${HOME}/.ayevdi/repo/ayevdi
+
+    export tmpurls=$(tempfile)
+    for n in $(find . -type f | grep -v .git | xargs cat | tr "()' =;," '\n\n\n\n\n\n\n' | grep bit.ly | grep http | sort -ur)
+    do
+      printf "%s," ${n}
+      curl ${n} 2>/dev/null | grep href | cut -d'"' -f2 | grep http
+    done >${tmpurls}
+    export fromrepo=$(cat ${tmpurls} | grep ayevdi-sfrom-init | head -1 | sed 's/,/\n/g; s/\/master/\n/g' | head -2 | tail -1 | cut -d'/' -f1,2,3,4,5 | sed 's/\//\\\//g')
+    export torepo=$(echo $2 | sed 's/\//\\\//g')
+    sed -i "s/${fromrepo}/${torepo}/g" ${tmpurls} 
+    for n in $(find . -type f | grep -v .git)
+    do
+      sed -i "$(cat ${tmpurls} | sed 's/\//\\\//g' | awk -vp1=s/ -vp2=/ -vp3=/g\;\  -F',' '{printf p1 $1 p2 $2 p3}')" $n
+      for m in {1..$(sourcefrom https://bit.ly/ayevdi-csum-depth)}
+      do
+        sourcefrom http://bit.ly/ayevdi-csum-regen $n
+      done
+      git add $n
+    done
+    git commit -m "$(echo 'Shifted links from ' ${fromrepo} ' ' ${torepo} | sed 's/\\//g')"
+    git push
+  popd
+  
+fi

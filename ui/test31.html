@@ -1,0 +1,249 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+/*
+# AYESEC:POST_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+# AYESEC:STATUTORY_HEADER
+if [ "${ayevdi_sourcefrom}" != "${HOME}/.ayevdi/ayevdi-sourcefrom" ]
+then
+  echo "AyeVDI by https://ayeai.xyz"
+  echo "Copyright (C) 2019-2020 Abhishek Choudhary, Dr Srija Katta"
+  echo ""
+  echo "NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only)"
+  echo "Further usage of these software, artifacts or methods"
+  echo "are subject to the 'latest' license agreement avaialble at"
+  echo "https://raw.githubusercontent.com/ayeai/spl/master/LICENSE"
+  echo ""
+  echo "AyeVDI not activated. Please use the following command to"
+  echo "activate AyeVDI"
+  echo '  ayesh=$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O${ayesh} -q && . ${ayesh}'
+  echo ""
+  exit
+fi
+# AYESEC:STATUTORY_HEADER_COMPLETED
+# AYESEC:PREV_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+*/
+
+body {
+  font-family: Arial;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  max-width: 800;
+  overflow: none;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 8px 16px;
+  transition: 0.3s;
+  font-size: 15px;
+  font-weight: 600;
+  background-color: #ccccff;
+  margin: 1px 1px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #b3b3ff;
+  hover: gray;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #aaaaff;
+  color: white;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: inline;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-top: none;
+  position: absolute;
+  left: -11;
+}
+
+/* Style the close button */
+.topright {
+  display: inline-block;
+  float: right;
+  cursor: pointer;
+  font-size: 32px;
+  position: absolute;
+  top: -35px;
+  right: 10px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  color: white;
+}
+
+.topright .tooltiptext {
+  visibility: hidden;
+  width: 150px;
+  background-color: white;
+  opacity: 0.9;
+  color: red;
+  text-align: center;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-radius: 5px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  top: 25px;
+  right: 105%;
+  z-index: 200;
+
+  font-size: 14px;
+  font-weight: 100;
+}
+
+.topright:hover .tooltiptext {
+  visibility: visible;
+}
+
+.topright:hover {color: red;}
+
+/**/
+.topright2 {
+  display: inline-block;
+  float: right;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 600;
+  position: absolute;
+  top: -30px;
+  right: 30px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  color: white;
+}
+
+.topright2 .tooltiptext {
+  visibility: hidden;
+  width: 150px;
+  background-color: white;
+  opacity: 0.9;
+  color: blue;
+  text-align: center;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-radius: 5px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  top: 20px;
+  right: 105%;
+  z-index: 200;
+
+  font-size: 14px;
+  font-weight: 100;
+}
+
+.topright2:hover .tooltiptext {
+  visibility: visible;
+}
+
+.topright2:hover {color: blue;}
+</style>
+  </head>
+  <body>
+    <div class="tab">
+      <button class="tablinks" id="button1"  onclick="openTab(event, 'Cnsl')">Console</button>
+      <button class="tablinks" id="button2"  onclick="openTab(event, 'Expl')">Explorer</button>
+      <button class="tablinks" id="button3"  onclick="openTab(event, 'IDE')">IDE</button>
+      <button class="tablinks" id="button4"  onclick="openTab(event, 'VCV')">ValidCV™</button>
+      <button class="tablinks" id="button5"  onclick="openTab(event, 'Share')">Share</button>
+      <button class="tablinks" id="button6"  onclick="openTab(event, 'Meet')">Meet</button>
+      <button class="tablinks" id="button7"  onclick="openTab(event, 'Apps')">Apps</button>
+      <button class="tablinks" id="button8"  onclick="openTab(event, 'Labs')">Labs</button>
+      <button class="tablinks" id="button9" onclick="openTab(event, 'TnC')">TnC</button>
+    </div>
+    <div id="Cnsl" class="tabcontent" style="display: inline; visibility: hidden;">
+      <div class="topright2"><span onclick="maxGUI(event,'Cnsl');">@</span><span class="tooltiptext">Float Console</span></div>';
+      <iframe width="800" height="670" frameborder="0" src="test101.html"></iframe>
+    </div>
+    <div id="Expl" class="tabcontent" style="display: inline; visibility: hidden;">
+      <div class="topright2"><span onclick="maxGUI(event,'Expl');">@</span><span class="tooltiptext">Float Explorer</span></div>';
+      <iframe width="800" height="670" frameborder="0" src="http://35.244.14.58:13346/"></iframe>
+    </div>
+    <div id="IDE" class="tabcontent" style="display: inline; visibility: hidden;">
+      <div class="topright2"><span onclick="maxGUI(event,'IDE');">@</span><span class="tooltiptext">Float IDE</span></div>';
+      <iframe width="800" height="670" frameborder="0" src="http://35.244.14.58:13346/"></iframe>
+    </div>
+    <div id="VCV" class="tabcontent" style="display: inline; visibility: visible;">
+      <div class="topright2"><span onclick="maxGUI(event,'VCV');">@</span><span class="tooltiptext">Float ValidCV™</span></div>';
+      <iframe width="800" height="670" frameborder="0" src="http://35.244.14.58:13346/"></iframe>
+    </div>
+    <div id="Share" class="tabcontent" style="display: inline; visibility: visible;">
+      <div class="topright2"><span onclick="maxGUI(event,'Share');">@</span><span class="tooltiptext">Float Share</span></div>';
+      <iframe width="800" height="670" frameborder="0" src="http://35.244.14.58:13346/"></iframe>
+    </div>
+    <div id="Meet" class="tabcontent" style="display: inline; visibility: hidden;">
+      <div class="topright2"><span onclick="maxGUI(event,'Meet');">@</span><span class="tooltiptext">Float Meet</span></div>';
+      <iframe width="800" height="670" frameborder="0" src="https://meet.jit.si/PinkRhinosObserveHastily"></iframe>
+    </div>
+    <div id="Apps" class="tabcontent" style="display: inline; visibility: visible;">
+      <div class="topright2"><span onclick="maxGUI(event,'Apps');">@</span><span class="tooltiptext">Float Apps</span></div>';
+      <iframe width="800" height="670" frameborder="0" src="http://35.244.14.58:13346/"></iframe>
+    </div>
+    <div id="Labs" class="tabcontent" style="display: inline; visibility: visible;">
+      <div class="topright2"><span onclick="maxGUI(event,'Labs');">@</span><span class="tooltiptext">Float Labs</span></div>';
+      <iframe width="800" height="670" frameborder="0" src="http://35.244.14.58:13346/"></iframe>
+    </div>
+    <div id="TnC" class="tabcontent" style="display: inline; visibility: visible;">
+      <div class="topright2"><span onclick="maxGUI(event,'TnC');">@</span><span class="tooltiptext">Float TnC</span></div>';
+      <iframe width="800" height="670" frameborder="0" src="https://ayeai.xyz/site/terms-conditions/"></iframe>
+    </div>
+    <script>
+function openTab(evt, tabName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "inline";
+  }
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.visibility = "hidden";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(tabName).style.visibility = "visible";
+  evt.currentTarget.className += " active";
+}
+      
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("button1").click();
+
+function maxGUI(event,dGUIName) {
+  var el = document.getElementById(dGUIName);
+  document.body.innerHTML=el.innerHTML;
+}
+    </script>
+  </body>
+</html>

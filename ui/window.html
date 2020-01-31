@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+/*
+# AYESEC:POST_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+# AYESEC:STATUTORY_HEADER
+if [ "${ayevdi_sourcefrom}" != "${HOME}/.ayevdi/ayevdi-sourcefrom" ]
+then
+  echo "AyeVDI by https://ayeai.xyz"
+  echo "Copyright (C) 2019-2020 Abhishek Choudhary, Dr Srija Katta"
+  echo ""
+  echo "NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only)"
+  echo "Further usage of these software, artifacts or methods"
+  echo "are subject to the 'latest' license agreement avaialble at"
+  echo "https://raw.githubusercontent.com/ayeai/spl/master/LICENSE"
+  echo ""
+  echo "AyeVDI not activated. Please use the following command to"
+  echo "activate AyeVDI"
+  echo '  ayesh=$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O${ayesh} -q && . ${ayesh}'
+  echo ""
+  exit
+fi
+# AYESEC:STATUTORY_HEADER_COMPLETED
+# AYESEC:PREV_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+*/
+
+body {
+  font-family: Arial;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background-size: cover;
+  /*background-image: repeating-radial-gradient(silver, #f6c3c3 10%, #c3f6c3 15%);
+  background-image: url("https://upload.wikimedia.org/wikipedia/commons/0/0e/Terragen_render.jpg");*/
+}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  visibility: visible;
+  transition: 0.2s 1s; /* delay of 1 seconds on hover off */
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 6px 12px;
+  transition: 0.3s;
+  font-size: 15px;
+  background-color: #b3e6b3;
+  margin: 1px 1px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #8cd98c;
+  color: gray;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #53c653;
+  color: white;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: inline;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-top: none;
+  position: absolute;
+}
+
+.titlebar {
+  display: inline;
+  background-image: url("https://media.giphy.com/media/krQzJaxbU1aXS/giphy.gif");
+  background-position: center;
+  background-size: 1200px 400px;
+  opacity: 0.8;
+  padding: 5px;
+  margin: 0;
+  border: 3px solid #777;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  min-width: 824px;
+  max-height: 40px;
+  vertical-align: text-top;
+  text-align: center;
+  position: absolute;
+  top: -15px;
+}
+
+.titletext {
+  display: inline;
+  vertical-align: text-top;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 5px;
+  margin: 5px;
+  border: 0;
+  position: relative;
+  top: 0px;
+  left: 0px;
+  color: white;
+  opacity: 1;
+  filter: brightness(200%);
+}
+
+.titlebutclose {
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  outline: 1px solid white;
+  cursor: pointer;
+  
+  position: absolute;
+  right: 10px;  
+}
+.titlebutmax {
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  outline: 1px solid white;
+  cursor: pointer;
+  
+  position: absolute;
+  right: 35px;  
+}
+.titlebutmax:hover {
+  background-color: blue;
+}
+.titlebutmin:hover {
+  background-color: blue;
+}
+.titlebutclose:hover {
+  background-color: red;
+}
+.titlebutmin {
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  outline: 1px solid white;
+  cursor: pointer;
+  
+  position: absolute;
+  right: 60px;  
+}
+
+/* Style the close button */
+.topleft {
+  display: inline-block;
+  float: right;
+  cursor: pointer;
+  font-size: 24px;
+  font-weight: 600;
+  position: absolute;
+  top: 0;
+  left: -40px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  color: #777;
+}
+
+.topleft .connimgleft {
+  visibility: visible;
+  display: inline;
+  position: absolute;
+  left: 17px;
+  top: -15px;
+  filter: hue-rotate(37deg);
+  opacity: 0.7;
+}
+
+.topleft .iconsleft1 {
+  visibility: visible;
+  display: inline;
+  position: absolute;
+  left: 18px;
+  top: -57px;
+  opacity: 1;
+}
+.topleft .iconsleft2 {
+  visibility: visible;
+  display: inline;
+  position: absolute;
+  left: 82px;
+  top: -39px;
+  opacity: 1;
+}
+.topleft .iconsleft3 {
+  visibility: visible;
+  display: inline;
+  position: absolute;
+  left: 117px;
+  top: -42px;
+  opacity: 1;
+}
+
+.topleft .tooltipleft {
+  visibility: hidden;
+  width: 150px;
+  background-color: white;
+  opacity: 0.9;
+  color: black;
+  text-align: center;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-radius: 5px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  top: 5px;
+  left: 105%;
+  z-index: 200;
+
+  font-size: 14px;
+  font-weight: 100;
+}
+
+/* Style the close button */
+.topright {
+  display: inline-block;
+  float: right;
+  cursor: pointer;
+  font-size: 24px;
+  font-weight: 600;
+  position: absolute;
+  top: 0;
+  right: -40px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  color: #777;
+}
+
+.topright .connimgright {
+  visibility: visible;
+  display: inline;
+  position: absolute;
+  right: 20px;
+  top: -15px;
+  filter: hue-rotate(37deg);
+  opacity: 0.7;
+}
+
+.topright .iconsright1 {
+  visibility: visible;
+  display: inline;
+  position: absolute;
+  right: 50px;
+  top: -39px;
+  opacity: 0.8;
+}
+.topright .iconsright2 {
+  visibility: visible;
+  display: inline;
+  position: absolute;
+  right: 80px;
+  top: -35px;
+  opacity: 0.8;
+}
+.topright .iconsright3 {
+  visibility: visible;
+  display: inline;
+  position: absolute;
+  right: 114px;
+  top: -33px;
+  opacity: 1;
+}
+.topright .iconmiddle {
+  visibility: visible;
+  display: inline;
+  position: absolute;
+  right: 80px;
+  top: -34px;
+  opacity: 0.8;
+}
+
+.topright .tooltiptext {
+  visibility: hidden;
+  width: 150px;
+  background-color: white;
+  opacity: 0.9;
+  color: black;
+  text-align: center;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-radius: 5px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  top: 5px;
+  right: 105%;
+  z-index: 200;
+
+  font-size: 14px;
+  font-weight: 100;
+}
+
+.topright:hover .tooltiptext {
+  visibility: visible;
+}
+
+.topright:hover {color: yellow;}
+
+.topleft:hover .tooltipleft {
+  visibility: visible;
+}
+
+.topleft:hover {color: yellow;}
+
+</style>
+</head>
+<body>
+
+<div class="tab">
+  <button class="addHMI"   id="addHMIButtonG" onclick="addHMI(event)">Add HMI...</button>
+  <!--<button class="addTerm"  id="addTermButton" onclick="addTerm(event)">Add Terminal...</button>!-->
+</div>
+
+<div id="addHMIDiv" class="addTerm" style="display: inline; visibility: hidden;">
+  <p>Add a new window...</P>
+</div>
+
+<script>
+//BG changer
+  var listBG = [
+  "url('https://upload.wikimedia.org/wikipedia/commons/0/0e/Terragen_render.jpg')",
+  "url('https://upload.wikimedia.org/wikipedia/commons/e/e6/Hazy_Crazy_Sunrise.jpg')",
+  "url('https://media.giphy.com/media/kwlvrqugaY3Ic/source.gif')",
+  "url('https://i.gifer.com/MUJw.gif')",
+  "url('https://media.giphy.com/media/l3nSGQ045gEvvQFRm/source.gif')"
+  ];
+function myFunction() {
+  var d = Math.floor(listBG.length * Math.random());
+  document.body.style.backgroundImage=listBG[d].toString();
+}
+
+myFunction();
+
+setInterval(myFunction,60000);
+
+//Window funcs
+function winclose(id) {
+
+  var elmnt=document.getElementById(id);
+
+  elmnt.remove();  
+} 
+function winmax(id) {
+
+  var elmnt=document.getElementById(id);
+
+  var winarea=elmnt.querySelector("#winarea");
+  winarea.style.display="block";  
+  winarea.style.visibility="visible"; 
+
+  var title=elmnt.querySelector("#Title");
+  title.style.borderBottomLeftRadius  = "0";
+  title.style.borderBottomRightRadius = "0";
+  title.style.minWidth = "824px";
+  title.style.textAlign = "center";
+} 
+function winmin(id) {
+
+  var elmnt=document.getElementById(id);
+
+  var winarea=elmnt.querySelector("#winarea");
+  winarea.style.display="inline";  
+  winarea.style.visibility="hidden";  
+  elmnt.style.height="5px";
+  elmnt.style.width="325px";
+
+  var title=elmnt.querySelector("#Title");
+  title.style.borderBottomLeftRadius  = "15px";
+  title.style.borderBottomRightRadius = "15px";
+  title.style.minWidth = "325px";
+  title.style.textAlign = "left";
+} 
+
+tofore();
+
+function tofore() {
+
+  var allDivs = document.getElementsByTagName("div");
+  var prev = false;
+
+  for(ii = 0; ii < allDivs.length; ii++) {
+      allDivs[ii].onclick = function() {
+        this.style.position = 'absolute';
+        if (prev) { prev.style.zIndex = 1; }
+        this.style.zIndex = 1000;
+        prev = this;
+      }
+  }
+
+
+//Clumsy implementation below. Leaving behind for ideas
+/*
+  for(ii = 0; ii < allDivs.length; ii++) {
+      //Initialize on new window
+      var tmaxZ=0;
+      for(jj = 0; jj < allDivs.length; jj++) {
+        if (tmaxZ<allDivs[jj].style.zIndex) {
+          tmaxZ=allDivs[jj].style.zIndex;
+        }
+      }
+      newwin.style.zIndex=2000+allDivs.length;
+      if (newwin.style.zIndex<tmaxZ) {
+        newwin.style.zIndex=tmaxZ+1;
+      }
+      allDivs[ii].onclick = function() {
+        var tDivs = document.getElementsByTagName("div");
+        var prev = false;
+        var maxZ = 0;
+
+        // set all windows to zIndex-=1, find max, and set max+1 for the target
+        for(t = 0; t < tDivs.length; t++) {
+          tDivs[t].style.zIndex -= 1;
+          if(maxZ<tDivs[t].style.zIndex) {
+            maxZ=tDivs[t].style.zIndex;
+          }
+        }
+        this.style.zIndex = maxZ + 1;
+      }
+  }
+*/
+
+}
+
+
+//Make the DIV element draggagle:
+function dragElement(elmnt) {
+  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+ 
+    /* otherwise, move the DIV from anywhere inside the DIV:*/
+    elmnt.onmousedown = dragMouseDown;
+  
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // get the mouse cursor position at startup:
+    elmnt.style.zIndex = 1001;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // calculate the new cursor position:
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    // set the element's new position:
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+  }
+
+  function closeDragElement() {
+    /* stop moving when mouse button is released:*/
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
+}
+
+function openTab(evt, tabName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "inline";
+  }
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.visibility = "hidden";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(tabName).style.visibility = "visible";
+  evt.currentTarget.className += " active";
+}
+
+function openHMI(evt, tabName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  /*for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "inline";
+  }
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.visibility = "hidden";
+  }*/ // Since not needed for windows
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  evt.currentTarget.className += " active";
+  winmax(tabName);
+  //document.getElementById(tabName).click();
+}
+
+termNum=0
+termMax=5 // It's 5, but the 5th one will be taken when HMI is replaced by term in shell service
+// TODO: Fix slow interaction speed with 5 or more parallel connections
+function addTerm(evt) {
+
+  termNum=termNum+1;
+
+  if(termNum<=termMax) {
+    
+    var  ibut = document.createElement('button');
+    ibut.setAttribute('class', 'tablinks');
+    ibut.setAttribute('id', 'button' + termNum); //Add the term number from a global
+    ibut.setAttribute('onclick', "openTab(event, 'Term" + termNum + "')");
+    ibut.innerHTML='Term' + termNum;
+ 
+    var  ifrm = document.createElement('div');
+    ifrm.setAttribute('id', 'Term' + termNum); //Add the term number from a global
+    ifrm.setAttribute('class', 'tabcontent');
+    ifrm.style.display = "inline";
+    ifrm.style.visibility = "hidden"
+    ifrm.innerHTML='<div class="topright"><span onclick="delTerm(event,'+termNum+');">&times</span><span class="tooltiptext">Close '+ibut.innerHTML+'</span></div>';
+    ifrm.innerHTML+='<iframe width="800" height="632" frameborder="0" src="http://35.244.14.58:16433/"></iframe>';
+
+    var el1 = document.getElementById('addTermDiv');
+    el1.parentNode.insertBefore(ifrm, el1);
+
+    var el2 = document.getElementById('addTermButton');
+    el2.parentNode.insertBefore(ibut, el2);
+
+    document.getElementById('button' + termNum).click();
+
+  }
+  if(termNum>=termMax) {
+
+    var el1 = document.getElementById('addTermButton');
+    el1.style.display="none";
+
+  }
+}
+
+function delTerm(event,dTermNum) {
+  termMax+=1;
+
+  var el1 = document.getElementById('button'+dTermNum);
+  el1.remove();
+
+  var el2 = document.getElementById('Term'+dTermNum);
+  el2.remove();
+
+  var el3 = document.getElementById('addTermButton');
+  el3.style.display="inline";
+
+  // Activate HMI, just in case no terms left
+  for(i=1;i<=HMIMax;i++) {
+    var elt1 = document.getElementById('buttonG'+i);
+    try {
+      elt1.click();
+    }
+    catch(err) {
+      // Log the order
+    }
+  }
+
+  // Now see if any container is alive - activate that, or
+  // start a new container?
+  for(i=termMax-1;i>=dTermNum+1;i--) {
+    var el4 = document.getElementById('button'+i);
+    try {
+      el4.click();
+    }
+    catch(err) {
+      // Log the order
+    }
+  }
+  for(i=1;i<=dTermNum-1;i++) {
+    var el5 = document.getElementById('button'+i);
+    try {
+      el5.click();
+    }
+    catch(err) {
+      // Log the order
+    }
+  }
+}
+
+
+HMINum=0
+HMIMax=10 // We run only one HMI server, but can accomodate more if needed 
+function addHMI(evt) {
+
+  HMINum=HMINum+1;
+
+  if(HMINum<=HMIMax) {
+    
+    var  ibut = document.createElement('button');
+    ibut.setAttribute('class', 'tablinks');
+    ibut.setAttribute('id', 'buttonG' + HMINum); //Add the HMI number from a global
+    ibut.setAttribute('onclick', "openHMI(event, 'HMI" + HMINum + "')");
+    ibut.innerHTML='HMI' + HMINum;
+
+    //TODO: Important - HMI taskbar buttons are disabled pending debug
+    ibut.style.display = "none";
+ 
+    var  ifrm = document.createElement('div');
+    ifrm.setAttribute('id', 'HMI' + HMINum); //Add the HMI number from a global
+    ifrm.setAttribute('class', 'tabcontent');
+    ifrm.style.display = "inline";
+    ifrm.style.visibility = "visible"; /*winclose(\'HMI'+ HMINum +'\');*/
+    ifrm.innerHTML='<div id="Title" class="titlebar" ondblclick="winmax(\'HMI'+ HMINum +'\');" style="display: block; visibility: visible;"><span class="titletext"><a>AyeVDI™ by AyeAI™ : HMI ' + HMINum + '</a></span><span class="titlebutclose" onclick="delHMI(event,'+HMINum+');"><a>&nbsp;&times;&nbsp;</a></span><span class="titlebutmax" onclick="winmax(\'HMI'+ HMINum +'\');"><a>&nbsp;^&nbsp;</a></span><span class="titlebutmin" onclick="winmin(\'HMI'+ HMINum +'\');"><a>&nbsp;–&nbsp;</a></span><div class="topleft"><span onclick="toHMI(event,'+HMINum+');">O⇨</span><span class="connimgleft"><img src="https://media.giphy.com/media/KJUS17ZY3Q3tu/200w_d.gif" width="20" height="20"></img></span><span class="iconsleft1"><img src="https://media.giphy.com/media/ctacpbX4FHIasGKGqK/200w_d.gif" width="90" height="90"><img></span><span class="iconsleft2"><img src="https://www.gnu.org/graphics/babies/BabyGnuAlpha.png" width="45" height="45"></img></span><span class="iconsleft3"><img src="https://www.gnu.org/graphics/babies/BabyTuxSitAlpha.png" width="50" height="50"></img></span><span class="tooltipleft">Input to '+ibut.innerHTML+'</span></div><div class="topright"><span onclick="fromHMI(event,'+HMINum+');">⇨O</span><span class="iconsright3"><img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Under_construction_animated.gif" width="29" height="29"><img></span><span class="iconsright2"><img src="https://upload.wikimedia.org/wikipedia/commons/2/20/Alarm_Clock_GIF_Animation.gif" width="30" height="30"><img></span><span class="iconsright1"><img src="https://www.animatedimages.org/data/media/576/animated-garbage-bin-image-0008.gif" width="35" height="35"><img></span><span class="connimgright"><img src="https://media.giphy.com/media/KJUS17ZY3Q3tu/200w_d.gif" width="20" height="20"></img></span><span class="tooltiptext">Output from '+ibut.innerHTML+'</span></div></div><div id="winarea"><iframe width="840" height="805" frameborder="0" src="level0.html"></iframe></div>';
+
+    var el1 = document.getElementById('addHMIDiv');
+    el1.parentNode.insertBefore(ifrm, el1);
+
+    var el2 = document.getElementById('addHMIButtonG');
+    el2.parentNode.insertBefore(ibut, el2);
+
+    document.getElementById('buttonG' + HMINum).click();
+    dragElement(document.getElementById('HMI' + HMINum));
+
+    //Make elements clickable - bring to front
+    tofore();
+
+  }
+  if(HMINum>=HMIMax) {
+
+    var el1 = document.getElementById('addHMIButtonG');
+    el1.style.display="none";
+
+  }
+}
+
+function toHMI(event,dHMINum) {
+}
+
+function fromHMI(event,dHMINum) {
+}
+
+function delHMI(event,dHMINum) {
+  HMIMax+=1;
+
+  var el1 = document.getElementById('buttonG'+dHMINum);
+  el1.remove();
+
+  var el2 = document.getElementById('HMI'+dHMINum);
+  el2.remove();
+
+  var el3 = document.getElementById('addHMIButtonG');
+  el3.style.display="inline";
+
+  // Activate a Term if available, just in case no HMIs left
+  for(i=1;i<=termMax;i++) {
+    var elt1 = document.getElementById('button'+i);
+    try {
+      elt1.click();
+    }
+    catch(err) {
+      // Log the order
+    }
+  }
+  
+  // Now see if any container is alive - activate that, or
+  // start a new container?
+  for(i=HMIMax-1;i>=dHMINum+1;i--) {
+    var el4 = document.getElementById('buttonG'+i);
+    try {
+      el4.click();
+    }
+    catch(err) {
+      // Log the order
+    }
+  }
+  for(i=1;i<=dHMINum-1;i++) {
+    var el5 = document.getElementById('buttonG'+i);
+    try {
+      el5.click();
+    }
+    catch(err) {
+      // Log the order
+    }
+  }
+}
+
+
+// Get the element with id="defaultOpen" and click on it
+//document.getElementById("addTermButton").click();
+document.getElementById("addHMIButtonG").click();
+
+
+// TODO: Create menu dropdown effect
+
+</script>
+</body>
+</html> 

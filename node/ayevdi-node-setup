@@ -1,0 +1,98 @@
+#!/bin/bash
+# AYESEC:POST_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+# AYESEC:STATUTORY_HEADER
+if [ "${ayevdi_sourcefrom}" != "${HOME}/.ayevdi/ayevdi-sourcefrom" ]
+then
+  echo "AyeVDI by https://ayeai.xyz"
+  echo "Copyright (C) 2019-2020 Abhishek Choudhary, Dr Srija Katta"
+  echo ""
+  echo "NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only)"
+  echo "Further usage of these software, artifacts or methods"
+  echo "are subject to the 'latest' license agreement avaialble at"
+  echo "https://raw.githubusercontent.com/ayeai/spl/master/LICENSE"
+  echo ""
+  echo "AyeVDI not activated. Please use the following command to"
+  echo "activate AyeVDI"
+  echo '  ayesh=$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O${ayesh} -q && . ${ayesh}'
+  echo ""
+  exit
+fi
+# AYESEC:STATUTORY_HEADER_COMPLETED
+# AYESEC:PREV_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+
+# Install basic dependencies
+# TODO: Ensure these are reflected correctly in packages
+# htop      - needed for system monitoring
+# curl      - required for url shortener 301 dereferencing
+# wget      - required for sourcefrom
+# expect    - required for automation such as profile tools
+# screen    - required for daemonizing services
+# gawk      - required for scripting
+# lolcat    - required for standard coloring of console output
+# sharutils - required for managing uuencoded content
+sudo apt install -y htop curl wget expect screen gawk lolcat sharutils
+logger "NODE:SETUP:Installed htop curl wget expect screen gawk lolcat sharutils"
+
+# Install apache and enable necessary modules
+# proxy, proxy_http, ssl - required for redirecting shell and gui
+sudo apt install -y apache2
+sudo a2enmod proxy
+sudo a2enmod proxy_http
+sudo a2enmod ssl
+sudo ln -sf /etc/apache2/sites-available/default-ssl.conf /etc/apache2/sites-enabled/
+
+# TODO: Enable apache ssl with self signed certificate
+# TODO: Integrate dual level certification here - for node and containers
+# TBD: Shouldn't certification be done separately later?
+
+# Setup proxypass entries with port masking for security
+export tmpscript=$(tempfile)
+export tmpconf=$(tempfile)
+wget -O${tmpscript} -q https://bit.ly/ayevdi-proxy-setsalt-awk
+cat /etc/apache2/sites-enabled/default-ssl.conf | awk -f ${tmpscript} >${tmpconf}
+sudo cp /etc/apache2/sites-available/default-ssl.conf /etc/apache2/sites-available/default-ssl.conf.$(date +%s)
+sudo cp -f ${tmpconf} /etc/apache2/sites-available/default-ssl.conf
+export tmpscript=$(date +%s)
+export tmpconf=$(date +%s)
+
+# Restart apache and enable apache for automatic startup
+sudo systemctl restart apache2
+sudo systemctl enable apache2
+
+# Build and install node server (customized shellinabox as of now) 
+sourcefrom https://bit.ly/ayevdi-build-siab
+sudo dpkg -r shellinabox
+sudo dpkg -i ayebuild/shellinabox_2.21_amd64.deb
+
+# TODO: The following should start as per node profile
+# TODO: Another option is to request a specific image when calling the VDI access API,
+#      in that case only shell and gui servers suffice. All will carry explorer and theia, which should 
+#      be part of base image
+# TODO: Instead of serving JIT containers preload containers (and pause them!) based on demand prediction
+#      - paused (frozen) containers can be run (thawed and warmed) JIT at request
+
+# Daemonize garbage collector (abandoned container stopper)
+#screen -S "ayevdi-service-garbageCollector" -d -m bash -lci 'while [ 1 ]; do sleep 10; sourcefrom https://bit.ly/ayevdi-node-stop-abandoned; done'
+
+# Daemonize timer policy
+#screen -S "ayevdi-service-timePolicy" -d -m bash -lci 'while [ 1 ]; do sleep 10; export timelimit=1899; sourcefrom http://bit.ly/ayevdi-node-policy-timeout; done'
+
+# Daemonize idle policy
+
+#Daemonize shell service
+#screen -S "ayevdi-service-shell" -d -m shellinaboxd --css /etc/shellinabox/options-enabled/00_White\ On\ Black.css -p 4203 -s "/:$(id -u):$(id -g):${PWD}:/bin/bash -c 'echo AyeVDI by https://ayeai.xyz && sourcefrom https://bit.ly/ayevdi-ephemeral-shell 2>&1 | tee >(tail -2) >/dev/null >(awk -f /usr/share/ayevdi/ayerun.awk ) && (while [ 1 ]; do printf "."; sleep 1; done) || echo Server busy'" --disable-ssl
+
+#Daemonize gui service
+#screen -S "ayevdi-service-gui" -d -m shellinaboxd --css /etc/shellinabox/options-enabled/00_White\ On\ Black.css -p 4202 -s "/:$(id -u):$(id -g):${PWD}:/bin/bash -c 'echo AyeVDI by https://ayeai.xyz && sourcefrom https://bit.ly/ayevdi-ephemeral 2>&1 | tee >(tail -2) >/dev/null >(awk -f /usr/share/ayevdi/ayerun.awk ) && (while [ 1 ]; do printf "."; sleep 1; done) || echo Server busy'" --disable-ssl
+
+# Prepare current user for aministering ayevdi
+# TODO: No sudo access should be needed beyond this point unless upgrading
+sourcefrom https://bit.ly/ayevdi-host-user-setup
+
+# TODO: See list below
+#   - Add policy enforcer - compute, memory, io
+#   - Harden access loggers
+#   - Add preload support
+#   - Add configuration load from repository (curl) support for policies
+#   - Add management interfaces
+#   - Add support for auto-start daemon - needed for node life cycle management
