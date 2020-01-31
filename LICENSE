@@ -1,7 +1,13 @@
        AyeAI Singularity Public License
+<<<<<<< HEAD
    Version 1 Revision 1.3, 15th December 2019
 
 Copyright (C) 2019-2020 Abhishek Choudhary
+=======
+   Version 1 Revision 1.2, 15th December 2019
+
+Copyright (C) 2019 Abhishek Choudhary
+>>>>>>> 0765f8f0a637450ed16cb9eb09bdf797c81ed304
 (aliases: obonac, cognitist, hi_pedler, sosaysac, ac,
 achoudhary, abhishek, a.choudhary, choudhary and so on)
 
@@ -162,6 +168,7 @@ courts in the Hyderabad, Telangana, India only, WHEREAS, the
 reader, or the user, is at liberty to not use such methods or
 artifacts, AND there is no other license that grants priviledge
 to use apart from this, unless expressly permitted by the hand
+<<<<<<< HEAD
 of the author, and AS SUCH, the following notice ( including SHS
 must be included in all artifacts distribued under this license,
 unless distributed in non-text form with justification:
@@ -188,6 +195,9 @@ fi
 
 
 =============================================================
+=======
+of the author.
+>>>>>>> 0765f8f0a637450ed16cb9eb09bdf797c81ed304
 
 Reference:
 [1] Original text of the GNU GPL v2 as reproduced below
