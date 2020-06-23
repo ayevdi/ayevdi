@@ -1,8 +1,5 @@
 Step 1 : Set up a cloud instance or server ( u can use gcloud, aws .. Others TBD)
 Step 2 : From the bash terminal connect to the cloud instance using ssh ( currently ayevdi supports bash based shell or any terminal that offer 'apt' services) 
-````         
- ssh : 
- ```
          (from the readmefile)
          
 Step 3 :  Enable AyeSec secure web scripts 
@@ -35,3 +32,8 @@ Launch a host based GUI session
 Note: This will provide a GUI from the host on port 6080
 
 sourcefrom https://bit.ly/ayevdi-guiserver-host
+
+AyeVDI with only shell in container with current / persistent user
+```
+sourcefrom https://bit.ly/ayevdi-docker-shell
+```
