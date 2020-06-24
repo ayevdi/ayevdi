@@ -20,7 +20,7 @@ Step 6 : Choose the service use want to run on your node and execute the code as
 Launch a host based shell session on port 4203
 
 sourcefrom https://bit.ly/ayevdi-shellserver-host
-###### For GUI :
+##### For GUI :
 
 Launch a host based GUI session Note: This will provide a GUI from the host on port 6080
 
