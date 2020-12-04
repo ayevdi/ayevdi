@@ -425,3 +425,9 @@ git clone https://github.com/ayevdi/ayevdi; cd ayevdi; for n in $(find . -type f
 #### The immediate next sections are being captured into OSTs (one step tricks). Please skip ahead to launching the server
 TODO: Need OSTs for migrating to different servers, repo-hosts, url shorteners, across cloud providers etc.
 TODO: Enable local hosting / OSTs to build infra from scratch
+
+#Edits for December 2020 release candidate
+OST to create seed AyeVDI image
+```
+curl https://raw.githubusercontent.com/ayevdi/ayevdi/master/image/ayevdi-seed | bash -
+```
