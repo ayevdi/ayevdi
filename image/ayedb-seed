@@ -1,0 +1,147 @@
+# AYESEC:POST_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+# AYESEC:STATUTORY_HEADER
+if [ "${ayevdi_sourcefrom}" != "${HOME}/.ayevdi/ayevdi-sourcefrom" ]
+then
+  echo "AyeVDI by https://ayeai.xyz"
+  echo "Copyright (C) 2019-2020 Abhishek Choudhary, Dr Srija Katta"
+  echo ""
+  echo "NO WARRANTY, and ZERO LIABILITY (Limited to INR 1/- only)"
+  echo "Further usage of these software, artifacts or methods"
+  echo "are subject to the 'latest' license agreement avaialble at"
+  echo "https://raw.githubusercontent.com/ayeai/spl/master/LICENSE"
+  echo ""
+  echo "AyeVDI not activated. Please use the following command to"
+  echo "activate AyeVDI"
+  echo '  ayesh=$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O${ayesh} -q && . ${ayesh}'
+  echo ""
+  exit
+fi
+# AYESEC:STATUTORY_HEADER_COMPLETED
+# AYESEC:PREV_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
+
+
+function clean_slate_ayedb() {
+  #Uncomment the following 3 lines to destroy the current ayedb
+  #TODO: Ephemerize these and eliminate
+  docker stop ayedb
+  docker rm ayedb
+  #killall screen #super risky command
+}
+
+function clean_slate_docker() {
+
+  #Stop all running containers
+  docker ps -q  | xargs docker stop
+
+  #Remove all containers
+  docker ps -aq | xargs docker rm
+
+  #Remove all docker images
+  docker images | tail +2 | awk '{print $3}' | xargs -n1 docker image rm
+
+}
+
+function status() {
+
+  #List docker images
+  docker images
+
+  #List all docker containers
+  docker ps -a
+
+  #List all screen incovations
+  screen -ls
+
+}
+
+function seed_init() {
+
+  #Cleanup all vestiges
+  echo Staus ab initio...
+  status
+
+  echo Start with a clean slate of docker containers and images
+  clean_slate_docker
+
+  echo Clean slate docker status
+  status
+
+  echo Pull the ayevdi/ayevdi:seed image
+  docker pull ayevdi/ayevdi:seed
+
+  echo Seed ayevdi/ayevdi image status
+  status
+
+}
+
+
+#Initialize the seed distro :: TBD - enable support for multiple distros (both as host and guest)
+seed_init
+
+#Launch initial container
+clean_slate_ayedb
+screen -dmS ayedb docker run --name ayedb -v /home/${USER}/ayevh/work:/ayedb/work -p 9090:3306 --hostname ayeai -u root -w /root -it ayevdi/ayevdi:seed bash
+printf "Waiting for \"ayedb\" services to initialize... "
+while [ $(docker ps | grep ayedb | wc -l) -lt 1 ]
+do
+  printf .
+  sleep 1
+done
+echo Container "ayedb" launched
+
+
+echo Status after creating initial container
+status
+
+#In the container - create user ayedb
+docker exec -w /root -u root -it ayedb adduser --disabled-password --gecos "AyeDB@AyeAI,(C)2020 AyeAI,Under AyeSPL,+919966699473,Made in Bharat" ayedb 
+#TODO Add signature security here
+
+#Perform the application installation tasks here
+
+#First an update
+docker exec -w /root -u root ayedb apt update
+
+#Nopw install what is needed
+docker exec -w /root -u root ayedb bash -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata'
+docker exec -w /root -u root ayedb apt install -y mysql-server expect
+
+#Start the web service
+docker exec -w /root -u root ayedb service mysql start
+
+#Configure the DB server
+mkdir -p work/ayedb
+cat <<EOF >work/ayedb/db_inst
+#!/usr/bin/expect
+set timeout 10
+spawn mysql_secure_installation mysql_secure_installation -D
+expect "New password:"
+send "PASSWORD\n"
+expect "Re-enter new password:"
+send "PASSWORD\n"
+expect "Do you wish to continue with the password provided?(Press y|Y for Yes, any other key for No) :"
+send "y\n"
+expect eof
+EOF
+docker exec -w /root -u root ayedb expect /ayedb/work/ayedb/db_inst
+
+#Install the default db
+
+#Enable AyeVDI autoload
+#TBD: Whether to disable / consider alternatives like local repo
+docker exec -w /home/ayedb -u ayedb ayedb bash -c "echo 'if [ -x \${HOME}/.ayevdi ]; then ayesh=\$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O\${ayesh} -q && . \${ayesh}; fi' >>\${HOME}/.bashrc"
+docker exec -w /home/ayedb -u ayedb ayedb mkdir -p /home/ayedb/.ayevdi
+#TODO Add signature security here
+
+#Check the basics of user ayedb
+docker exec -w /home/ayedb -u ayedb -it ayedb whoami
+
+#Commit the image as seed ayedb image
+docker commit $(docker ps | grep ayedb | cut -d ' ' -f1) ayedb/ayedb:seed
+
+echo Status after creating ayedb/ayedb:seed image
+status
+
+echo Now push the image with "docker push ayedb/ayedb:seed"
+docker login
+docker push ayedb/ayedb:seed
