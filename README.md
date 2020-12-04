@@ -426,8 +426,16 @@ git clone https://github.com/ayevdi/ayevdi; cd ayevdi; for n in $(find . -type f
 TODO: Need OSTs for migrating to different servers, repo-hosts, url shorteners, across cloud providers etc.
 TODO: Enable local hosting / OSTs to build infra from scratch
 
-#Edits for December 2020 release candidate
-OST to create seed AyeVDI image
+# Edits for December 2020 release candidate
+## OST to create seed AyeVDI image
+#### This scripts expects ayevdi admin login
 ```
 curl https://raw.githubusercontent.com/ayevdi/ayevdi/master/image/ayevdi-seed | bash -
+```
+
+## OST to launch AyeVDI seed container
+docker should be installed and running
+```
+docker pull ayevdi/ayevdi:seed
+docker run --name ayevdi --hostname ayevdi -u root -w /home/ayevdi -it ayevdi/ayevdi:seed@sha256:9beb88d03c10a80539db4c6d9a0062e749063397829d01660444ab6b3b23f894
 ```
