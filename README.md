@@ -465,3 +465,13 @@ docker pull ayehp/ayehp:seed
 screen -dmS ayehp docker run -v /home/${USER}/ayevh/work:/home/ayehp/work -p 8080:80 --name ayehp -u root -w /home/ayehp -it ayehp/ayehp:seed bash -c 'service apache2 start && bash'
 xdg-open http://localhost:8080
 ```
+## OST to create AyeDB seed image
+```
+sourcefrom https://raw.githubusercontent.com/ayevdi/ayevdi/master/image/ayedb-seed
+```
+## OST to launch AyeDB seed container
+This needs "screen" - on PWD drop the screen part of the command
+```
+docker pull ayedb/ayedb:seed
+screen -dmS ayedb docker run -v /home/${USER}/ayevh/work:/home/ayedb/work -p 9090:3306 --name ayedb -u root -w /home/ayedb -it ayedb/ayedb:seed bash -c 'service apache2 start && bash'
+```
