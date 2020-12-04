@@ -58,7 +58,7 @@ seed_init
 
 #Launch initial container
 clean_slate_ayeweb
-screen -dmS ayeweb docker run --name ayeweb --hostname ayeai -u root -w /root -it ayevdi/ayevdi:seed bash
+screen -dmS ayeweb docker run --name ayeweb -v /home/${USER}/ayevh/work:/ayeweb/work -p 8080:80 --hostname ayeai -u root -w /root -it ayevdi/ayevdi:seed bash
 printf "Waiting for \"ayeweb\" services to initialize... "
 while [ $(docker ps | grep ayeweb | wc -l) -lt 1 ]
 do
@@ -83,6 +83,15 @@ docker exec -w /root -u root ayeweb apt update
 #Nopw install what is needed
 docker exec -w /root -u root ayeweb bash -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata'
 docker exec -w /root -u root ayeweb apt install -y apache2
+
+#Configure the web server
+docker exec -w /root -u root ayeweb a2enmod ssl
+
+#Start the web service
+docker exec -w /root -u root ayeweb service apache2 start
+
+#Install the default site
+docker exec -w /root -u root ayeweb bash -c 'cp -r /ayeweb/work/ayeweb/* /var/www/html/'
 
 #Enable AyeVDI autoload
 #TBD: Whether to disable / consider alternatives like local repo
