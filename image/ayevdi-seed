@@ -88,6 +88,8 @@ docker exec -w /root -u root ayevdi apt install -y wget lolcat
 #TBD: Whether to disable / consider alternatives like local repo
 docker exec -w /home/ayevdi -u ayevdi ayevdi bash -c "echo 'if [ -x \${HOME}/.ayevdi ]; then ayesh=\$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O\${ayesh} -q && . \${ayesh}; fi' >>\${HOME}/.bashrc"
 docker exec -w /home/ayevdi -u ayevdi ayevdi mkdir -p /home/ayevdi/.ayevdi
+docker exec -w /home/ayevdi -u root ayevdi bash -c "echo 'if [ -x \${HOME}/.ayevdi ]; then ayesh=\$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O\${ayesh} -q && . \${ayesh}; fi' >>/root/.bashrc"
+docker exec -w /home/ayevdi -u root ayevdi mkdir -p /root/.ayevdi
 #TODO Add signature security here
 
 #Check the basics of user ayevdi
