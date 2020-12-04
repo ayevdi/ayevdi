@@ -450,6 +450,18 @@ sourcefrom https://raw.githubusercontent.com/ayevdi/ayevdi/master/image/ayeweb-s
 This needs "screen" - on PWD drop the screen part of the command
 ```
 docker pull ayeweb/ayeweb:seed
-screen -dmS ayeweb docker run -v /home/${USER}/ayevh/work:/home/ayeweb/work -p 8080:80 -p 8888:8888 --name ayeweb -u root -w /home/ayeweb -it ayeweb/ayeweb:seed bash -c 'service apache2 start && bash'
+screen -dmS ayeweb docker run -v /home/${USER}/ayevh/work:/home/ayeweb/work -p 8080:80 --name ayeweb -u root -w /home/ayeweb -it ayeweb/ayeweb:seed bash -c 'service apache2 start && bash'
+xdg-open http://localhost:8080
+```
+## OST to create AyeHp seed image
+```
+sourcefrom https://raw.githubusercontent.com/ayevdi/ayevdi/master/image/ayehp-seed
+```
+
+## OST to launch AyeHp seed container
+This needs "screen" - on PWD drop the screen part of the command
+```
+docker pull ayehp/ayehp:seed
+screen -dmS ayehp docker run -v /home/${USER}/ayevh/work:/home/ayehp/work -p 8080:80 --name ayehp -u root -w /home/ayehp -it ayehp/ayehp:seed bash -c 'service apache2 start && bash'
 xdg-open http://localhost:8080
 ```
