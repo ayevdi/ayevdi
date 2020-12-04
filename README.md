@@ -437,8 +437,8 @@ sourcefrom https://raw.githubusercontent.com/ayevdi/ayevdi/master/image/ayevdi-s
 docker should be installed and running
 ```
 docker pull ayevdi/ayevdi:seed
-docker run --name ayevdi --hostname ayeai -u root -w /home/ayevdi -it ayevdi/ayevdi:seed
-docker run --name ayevdi --hostname ayeai -u ayevdi -w /home/ayevdi -it ayevdi/ayevdi:seed 
+docker run --name ayevdi --hostname ayeai -u root -w /home/ayevdi -it ayevdi/ayevdi:seed bash
+docker run --name ayevdi --hostname ayeai -u ayevdi -w /home/ayevdi -it ayevdi/ayevdi:seed bash
 ```
 
 ## OST to create AyeWeb seed image
