@@ -444,4 +444,13 @@ docker run --name ayevdi --hostname ayevdi -u root -w /home/ayevdi -it ayevdi/ay
 docker run --name ayevdi --hostname ayevdi -u ayevdi -w /home/ayevdi -it ayevdi/ayevdi:seed
 docker run --name ayevdi --hostname ayeai -u ayevdi -w /home/ayevdi -it ayevdi/ayevdi:seed 
 ```
-
+### To test sourcefrom
+```
+https://raw.githubusercontent.com/ayehandsum/ayehandsum/master/ayesha-the-whiz
+```
+```
+date | sourcefrom https://raw.githubusercontent.com/ayehandsum/ayehandsum/master/ayesha-the-whiz-says
+```
+```
+trans -s en -t te "Have a nice day" |  sourcefrom https://raw.githubusercontent.com/ayehandsum/ayehandsum/master/ayesha-the-whiz-says
+```
