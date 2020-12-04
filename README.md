@@ -450,6 +450,6 @@ curl https://raw.githubusercontent.com/ayevdi/ayevdi/master/image/ayeweb-seed | 
 This needs "screen" - on PWD drop the screen part of the command
 ```
 docker pull ayeweb/ayeweb:seed
-docker run -v /home/${USER}/ayevh/work:/home/ayeweb/work -p 8080:80 -p 8888:8888 --name ayeweb -u root -w /home/ayeweb -it ayeweb/ayeweb:seed bash -c 'service apache2 start && bash'
+screen -dmS ayeweb docker run -v /home/${USER}/ayevh/work:/home/ayeweb/work -p 8080:80 -p 8888:8888 --name ayeweb -u root -w /home/ayeweb -it ayeweb/ayeweb:seed bash -c 'service apache2 start && bash'
 xdg-open https://localhost:8080
 ```
