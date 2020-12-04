@@ -430,7 +430,7 @@ TODO: Enable local hosting / OSTs to build infra from scratch
 ## OST to create seed AyeVDI image
 #### This scripts expects ayevdi admin login
 ```
-curl https://raw.githubusercontent.com/ayevdi/ayevdi/master/image/ayevdi-seed | bash -
+sourcefrom https://raw.githubusercontent.com/ayevdi/ayevdi/master/image/ayevdi-seed
 ```
 
 ## OST to launch AyeVDI seed container
@@ -443,7 +443,7 @@ docker run --name ayevdi --hostname ayeai -u ayevdi -w /home/ayevdi -it ayevdi/a
 
 ## OST to create AyeWeb seed image
 ```
-curl https://raw.githubusercontent.com/ayevdi/ayevdi/master/image/ayeweb-seed | bash -
+sourcefrom https://raw.githubusercontent.com/ayevdi/ayevdi/master/image/ayeweb-seed
 ```
 
 ## OST to launch AyeWeb seed container
