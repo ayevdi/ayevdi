@@ -1,0 +1,96 @@
+#(C) Copyright 2020 Abhishek Choudhary
+#Strictly under AyeAI SPL latest only
+#No Warranty. Liability restricted to INR 1/- (one Indian rupee) or less
+#For Academic purposes only. Not suitable for critical or life threatening situations
+
+function clean_slate_ayevdi() {
+  #Uncomment the following 3 lines to destroy the current ayevdi
+  #TODO: Ephemerize these and eliminate
+  docker stop ayevdi
+  docker rm ayevdi
+  #killall screen #super risky command
+}
+
+function clean_slate_docker() {
+
+  #Stop all running containers
+  docker ps -q  | xargs docker stop
+
+  #Remove all containers
+  docker ps -aq | xargs docker rm
+
+  #Remove all docker images
+  docker images | tail +2 | awk '{print $3}' | xargs -n1 docker image rm
+
+}
+
+function status() {
+
+  #List docker images
+  docker images
+
+  #List all docker containers
+  docker ps -a
+
+  #List all screen incovations
+  screen -ls
+
+}
+
+function seed_init() {
+
+  #Cleanup all vestiges
+  echo Staus ab initio...
+  status
+
+  echo Start with a clean slate of docker containers and images
+  clean_slate_docker
+
+  echo Clean slate docker status
+  status
+
+  echo Pull the distro image
+  #TODO: Add options to pull "latest"
+  docker pull ubuntu@sha256:c95a8e48bf88e9849f3e0f723d9f49fa12c5a00cfc6e60d2bc99d87555295e4c
+
+  echo Seed ubuntu image status
+  status
+
+}
+
+
+#Initialize the seed distro :: TBD - enable support for multiple distros (both as host and guest)
+seed_init
+
+#Launch initial container
+clean_slate_ayevdi
+screen -dmS ayevdi docker run --name ayevdi --hostname ayeai -u root -w /root -it ubuntu@sha256:c95a8e48bf88e9849f3e0f723d9f49fa12c5a00cfc6e60d2bc99d87555295e4c bash
+printf "Waiting for \"ayevdi\" services to initialize... "
+while [ $(docker ps | grep ayevdi | wc -l) -lt 1 ]
+do
+  printf .
+  sleep 1
+done
+echo Container "ayevdi" launched
+
+
+echo Status after creating initial container
+status
+
+#In the container - create user ayevdi
+#docker exec -w /root -u root -it ayevdi adduser ayevdi #automate this
+docker exec -w /root -u root -it ayevdi adduser --disabled-password --gecos "AyeVDI@AyeAI,(C)2020 AyeAI,Under AyeSPL,+919966699473,Made in Bharat" ayevdi #automate this
+#TODO Add signature security here
+
+#Check the basics of user ayevdi
+docker exec -w /home/ayevdi -u ayevdi -it ayevdi whoami
+
+#Commit the image as seed ayevdi image
+docker commit $(docker ps | grep ayevdi | cut -d ' ' -f1) ayevdi/ayevdi:seed
+
+echo Status after creating ayevdi/ayevdi:seed image
+status
+
+echo Now push the image with "docker push ayevdi/ayevdi:seed"
+docker login
+docker push ayevdi/ayevdi:seed
