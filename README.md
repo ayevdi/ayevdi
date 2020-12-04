@@ -437,11 +437,19 @@ curl https://raw.githubusercontent.com/ayevdi/ayevdi/master/image/ayevdi-seed | 
 docker should be installed and running
 ```
 docker pull ayevdi/ayevdi:seed
-docker run --name ayevdi --hostname ayevdi -u root -w /home/ayevdi -it ayevdi/ayevdi:seed
-```
-
-```
-docker run --name ayevdi --hostname ayevdi -u ayevdi -w /home/ayevdi -it ayevdi/ayevdi:seed
+docker run --name ayevdi --hostname ayeai -u root -w /home/ayevdi -it ayevdi/ayevdi:seed
 docker run --name ayevdi --hostname ayeai -u ayevdi -w /home/ayevdi -it ayevdi/ayevdi:seed 
 ```
 
+## OST to create AyeWeb seed image
+```
+curl https://raw.githubusercontent.com/ayevdi/ayevdi/master/image/ayeweb-seed | bash -
+```
+
+## OST to launch AyeWeb seed container
+This needs "screen" - on PWD drop the screen part of the command
+```
+docker pull ayeweb/ayeweb:seed
+docker run -v /home/${USER}/ayevh/work:/home/ayeweb/work -p 8080:80 -p 8888:8888 --name ayeweb -u root -w /home/ayeweb -it ayeweb/ayeweb:seed bash -c 'service apache2 start && bash'
+xdg-open https://localhost:8080
+```
