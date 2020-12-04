@@ -78,12 +78,20 @@ echo Status after creating initial container
 status
 
 #In the container - create user ayevdi
-#docker exec -w /root -u root -it ayevdi adduser ayevdi #automate this
-docker exec -w /root -u root -it ayevdi adduser --disabled-password --gecos "AyeVDI@AyeAI,(C)2020 AyeAI,Under AyeSPL,+919966699473,Made in Bharat" ayevdi #automate this
+docker exec -w /root -u root ayevdi adduser --disabled-password --gecos "AyeVDI@AyeAI,(C)2020 AyeAI,Under AyeSPL,+919966699473,Made in Bharat" ayevdi
+
+#Install AyeVDI minimal dependencies
+docker exec -w /root -u root ayevdi apt update
+docker exec -w /root -u root ayevdi apt install -y wget lolcat
+
+#Enable AyeVDI autoload
+#TBD: Whether to disable / consider alternatives like local repo
+docker exec -w /home/ayevdi -u ayevdi ayevdi bash -c "echo 'if [ -x \${HOME}/.ayevdi ]; then ayesh=\$(tempfile) && wget https://bit.ly/ayevdi-sfrom-init -O\${ayesh} -q && . \${ayesh}; fi' >>\${HOME}/.bashrc"
+docker exec -w /home/ayevdi -u ayevdi ayevdi mkdir -p /home/ayevdi/.ayevdi
 #TODO Add signature security here
 
 #Check the basics of user ayevdi
-docker exec -w /home/ayevdi -u ayevdi -it ayevdi whoami
+docker exec -w /home/ayevdi -u ayevdi ayevdi whoami
 
 #Commit the image as seed ayevdi image
 docker commit $(docker ps | grep ayevdi | cut -d ' ' -f1) ayevdi/ayevdi:seed
