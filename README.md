@@ -437,5 +437,5 @@ curl https://raw.githubusercontent.com/ayevdi/ayevdi/master/image/ayevdi-seed | 
 docker should be installed and running
 ```
 docker pull ayevdi/ayevdi:seed
-docker run --name ayevdi --hostname ayevdi -u root -w /home/ayevdi -it ayevdi/ayevdi:seed@sha256:9beb88d03c10a80539db4c6d9a0062e749063397829d01660444ab6b3b23f894
+docker run --name ayevdi --hostname ayevdi -u root -w /home/ayevdi -it ayevdi/ayevdi:seed
 ```
