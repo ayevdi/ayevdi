@@ -1,7 +1,4 @@
 #!/bin/bash
-# AYESEC:POST_SHS('64 lines')=e785940040e33493187af61d1b671d97469bb6f5e3152cee80ade863c5da6d53c4eceb05bd4d195699884355b10513c52617dce97142187a6138fc0d8861ce2d
-# AYESEC:FILE_TOP('ayevdi/doc/ayevdi-mascot')
-
 # AYESEC:POST_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
 # AYESEC:STATUTORY_HEADER
 if [ "${ayevdi_sourcefrom}" != "${HOME}/.ayevdi/ayevdi-sourcefrom" ]
