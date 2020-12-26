@@ -20,4 +20,5 @@ fi
 # AYESEC:STATUTORY_HEADER_COMPLETED
 # AYESEC:PREV_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
 
+
 export PS1="\n      AyeVDI   ##@###&\n  /^^^^^^^\"\"\"####  o ##:\n /      Driksh      ##''\n (  The Immutable  ##{,,\n { \   /++++++++/  #### \n   /  /  \     /  /  \  \n  /__/ \__\   /__/ \__\ \n\n${PS1}"
