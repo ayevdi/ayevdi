@@ -222,7 +222,7 @@ function addCntr(evt) {
     ifrm.style.visibility = "hidden";
     ifrm.innerHTML='<div class="topright"><span onclick="delCntr(event,'+CntrNum+');">&times</span><span class="tooltiptext">Close '+ibut.innerHTML+'</span></div>';
     ifrm.innerHTML+='<div class="topright2"><span onclick="maxCntr(event,'+CntrNum+');">@</span><span class="tooltiptext">Float '+ibut.innerHTML+'</span></div>';
-    ifrm.innerHTML+='<iframe width="812" height="722" frameborder="0" src="lastlevel.html"></iframe>';
+    ifrm.innerHTML+='<iframe width="812" height="722" frameborder="0" src="lastlayer.html"></iframe>';
 
     var el1 = document.getElementById('addCntrDiv');
     el1.parentNode.insertBefore(ifrm, el1);
