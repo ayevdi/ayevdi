@@ -19,7 +19,7 @@ fi
 # AYESEC:STATUTORY_HEADER_COMPLETED
 # AYESEC:PREV_SHS('18 lines')=9da1fc9afc1b85e1e81e78a53f97d4436d886182eec170ddd6c78ec71e64113d9ade4fd1bf969ed5bbe62baed9a575d2b5e3ccdc0383c27eb7a4b6bc71965afe
 
-export extip=$(hostname | awk -F"-" "{print $2"."$3"."$4"."$5}")
+export extip=$(echo dig-$(dig @resolver1.opendns.com ANY myip.opendns.com +short/hostname | tr "." "-") $(hostname) dummy-127-0-0-1 | awk -F"-" "}" "{print $2"."$3"."$4"."$5}")
 echo "WARNING: Later links may not work. Use the link below"
 echo "http://${extip}:6080/vnc_auto.html is the internet link for GUI console."
 
