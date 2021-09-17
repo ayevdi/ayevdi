@@ -22,6 +22,9 @@ fi
 
 # TODO: Replace extip with fully qualified name
 export extip=$(dig @resolver1.opendns.com ANY myip.opendns.com +short)
+#TBD: Move these into utility functions
+#TBD: Find the best method to determine host ip
+export extip=$(hostname | awk -F'-' '{print $2"."$3"."$4"."$5}')
 
 # Start only if not found
 wget --no-cache -O/dev/null -q http://${extip}:${ayesid}:4202
