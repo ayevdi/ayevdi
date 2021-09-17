@@ -26,7 +26,7 @@ export ayeuid=$(expr $(id -u ${USER}) + 12345)
 export ayesid=$(expr $(id -u ${USER}) + 15432)
 
 export ayecntr=ayevdi_${ayeuid}
-export extip=$(dig @resolver1.opendns.com ANY myip.opendns.com +short)
+export extip=$(hostname | awk -F"-" "{print $2"."$3"."$4"."$5}")
 
 docker container stop ${ayecntr}
 docker container rm ${ayecntr}
