@@ -45,5 +45,5 @@ fi
 
 #The last two lines must carry the urls for shell and gui terminals respectively
 echo AyeVDI by AyeAI https://ayeai.xyz
-echo http://${extip}:4203 gives ephemeral shell sessions
-echo http://${extip}:4203 gives ephemeral shell only
+echo http://${extip}/port4203 gives ephemeral shell sessions
+echo http://${extip}/port4203 gives ephemeral shell only

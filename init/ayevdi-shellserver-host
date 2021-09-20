@@ -42,7 +42,8 @@ then
 
 fi
 
-echo "http://${extip}:4203 is the shell console"
+#echo "http://${extip}:4203 is the shell console"
+echo "http://${extip}/port4203 is the shell console"
 
 # TODO: The above output may be misleading in some cases of errors - Fix
 # TODO: Handle errors
