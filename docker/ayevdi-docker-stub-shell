@@ -65,6 +65,7 @@ fi
 
 #The last two lines must carry the urls for shell and gui terminals respectively
 echo AyeVDI by AyeAI
-echo https://${extip}/port${ayesid}/ is the Shell console
-echo https://${extip}/port${ayesid}/ only Shell console is live
+echo https://vm.ayeai.xyz/port${ayesid}/ is the Shell console
+echo https://vm.ayeai.xyz/port${ayesid}/ only Shell console is live
+#echo https://${extip}/port${ayesid}/ only Shell console is live
 
