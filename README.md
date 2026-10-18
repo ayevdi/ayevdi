@@ -475,3 +475,11 @@ This needs "screen" - on PWD drop the screen part of the command
 docker pull ayedb/ayedb:seed
 screen -dmS ayedb docker run -v /home/${USER}/ayevh/work:/home/ayedb/work -p 9090:3306 --name ayedb -u root -w /home/ayedb -it ayedb/ayedb:seed bash -c 'service apache2 start && bash'
 ```
+
+<!-- trademarks:begin -->
+---
+AyeAI®, AyeCNSe® and AyeAM® are registered trademarks of Abhishek Choudhary in India, used and claimed worldwide since
+2019. The names of his products and projects are his trademarks; see [legal/TRADEMARKS.md](legal/TRADEMARKS.md). Code
+licences in this repository grant copyright permissions only and no right in any mark.
+© 1993–2026 Abhishek Choudhary. All rights reserved. AyeAI.
+<!-- trademarks:end -->
